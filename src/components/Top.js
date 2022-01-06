@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 
+//고양이와 책을 메인 타이틀//
 const Titleset = styled.div`
 display: flex;
 position: relative;

@@ -1,15 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { NavLink, withRouter } from 'react-router-dom'
-/*
-const Tit = styled.header`
-display: flex;
-align-items: center;
-align-content: center;
-vertical-align: middle;
-text-align: center;
-justify-content: center;
-`*/
+
+//네이게이션 구현
+
 const Unlist = styled.ul`
 text-align: center;
 justify-content: center;

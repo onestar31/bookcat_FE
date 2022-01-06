@@ -1,8 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import axios from 'axios'
+
+//회원가입 구현
 
 const Logintit = styled.div`
 font-family: 'OTWelcomeRA';
@@ -97,17 +100,56 @@ text-decoration: none;
 color: white;
 `
 
-const Signup = () => {
+const Signup = ({history}) => {
+    const [nicknameState, setNickname] = useState('')
+    const [emailState, setEmail] = useState('')
+    const [passwordState, setPassword] = useState('')
+    const [signState, setSignup] = useState(false)
+
+    const onChange = (e) => {
+        const {target: {value, name}} = e
+        if (name === 'nickname'){
+            setNickname(value)
+        } else if (name === 'email'){
+            setEmail(value)
+        } else {
+            setPassword(value)
+        }
+    }
+const onSubmit = (e) => {
+    /*let data = {
+            id: id,
+            pw: pw
+        }
+        axios
+        .post(url,  JSON.stringify(data), {
+          headers: {
+            "Content-Type": `application/json`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        });*/
+    e.preventDefault()
+    /*await axios.post('DB이름', {
+      params: {
+        nickname : nicknameState,
+        email : emailState,
+        password : passwordState
+      }
+    }).then(()=> {alert('회원가입 성공!'); history.push('/login')})
+.catch(() => alert('회원가입 실패'))};
+*/
     return(
         <>
     <Top />
     <Navigation />
     <Logintit>회원가입</Logintit>
     <Footprint1 src="footprint.png"></Footprint1>
-    <Loginform>
-        <Nickname type="text" placeholder='닉네임'></Nickname><br/>
-        <Email type="email" placeholder='이메일'></Email><br/>
-        <Password type="password" placeholder='비밀번호'></Password><br/>
+    <Loginform onSubmit={onSubmit}>
+        <Nickname type="text" required placeholder='닉네임' name="nickname" value={nicknameState} onChange={onChange}></Nickname><br/>
+        <Email type="email" required placeholder='이메일' name="email" value={emailState} onChange={onChange}></Email><br/>
+        <Password type="password" required placeholder='비밀번호' name="password" value={passwordState} onChange={onChange}></Password><br/>
         <Loginbtn>회원가입</Loginbtn><br/>
         <Asksignup>이미 회원이신가요?</Asksignup>
         <Signupbtn><Slink to="/login">로그인 하기</Slink></Signupbtn>
@@ -116,4 +158,5 @@ const Signup = () => {
     </>
     )}
 
-export default Signup
+    }
+export default withRouter(Signup)

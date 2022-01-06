@@ -1,8 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
+//로그인 구현
 
 const Logintit = styled.div`
 font-family: 'OTWelcomeRA';
@@ -86,15 +89,36 @@ color: white;
 `
 
 const Login = () => {
+    const [emailState, setEmail] = useState('')
+    const [passwordState, setPassword] = useState('')
+
+    const onChange = (e) => {
+        const {target: {value, name}} = e
+        if (name === 'email'){
+            setEmail(value)
+        } else {
+            setPassword(value)
+        }
+    }
+    const onSubmit = (e) => {
+        e.preventDefault()
+        axios.post('DB이름', {
+          params: {
+            email : emailState,
+            password : passwordState
+          }
+        })
+        axios.get('DB이름', {})
+    }
     return(
         <>
     <Top />
     <Navigation />
     <Logintit>로그인</Logintit>
     <Footprint1 src="footprint.png"></Footprint1>
-    <Loginform>
-        <Email type="email" placeholder='이메일'></Email><br/>
-        <Password type="password" placeholder='비밀번호'></Password><br/>
+    <Loginform onSubmit={onSubmit}>
+        <Email type="email" required placeholder='이메일' name='email' value={emailState} onChange={onChange}></Email><br/>
+        <Password type="password" required placeholder='비밀번호' name='password' value={passwordState} onChange={onChange}></Password><br/>
         <Loginbtn>로그인</Loginbtn><br/>
         <Asksignup>아직 회원이 아니신가요?</Asksignup>
         <Signupbtn><Slink to="/signup">회원가입 하기</Slink></Signupbtn>

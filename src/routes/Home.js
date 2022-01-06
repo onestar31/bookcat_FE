@@ -1,7 +1,12 @@
-import React from 'react'
+import { getByTitle } from '@testing-library/react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
+import { ResultApi } from '../ResultApi'
+import {withRouter} from 'react-router-dom'
+
+//메인 검색 화면 및 검색 결과 화면 구현
 
 const Body = styled.div`
 position: relative;
@@ -52,24 +57,106 @@ color: white;
 width: 110px;
 height: 35px;`
 
+const Resultform = styled.div`
+font-family: 'YanoljaYacheR';
+display: flex;
+flex-direction: column;
+align-content: center;
+align-items: center;
+`
 
-const Home = () => {
+const Resultname = styled.div`
+margin-top: 5rem;
+text-align: center;
+font-size: 30px;`
+
+const Resultbox = styled.div`
+display: flex;
+align-items: center;
+align-content: center;
+
+width: 50rem;
+height: 21rem;
+margin-top: 4rem;
+background: #EBCACA;`
+
+const Bookimg = styled.img`
+height: 90%;
+margin-left: 2%;
+`
+const Bookcontainer = styled.div`
+display: flex;
+flex-direction: column;
+margin-left: 14px;
+margin-right: 14px;`
+
+const Booktitle = styled.div`
+font-size: 28px;
+margin-bottom: 1rem;`
+
+const Bookauthors = styled.div`
+font-size: 23px;
+margin-bottom: 1rem;`
+
+const Bookcontents = styled.div`
+font-size: 19px;`
+
+const Home = ({history}) => {
+    const [keyword, setKeyword] = useState('꿈꿀 권리')
+    const [keyvalue, setKeyValue] = useState('')
+    const [data, setData] = useState('data')
+    const [change, setChange] = useState(true)
+
+    useEffect (() => {
+        async function booksdata() {
+            const params = {
+                target: 'title',
+                query: keyword,
+                size: 5,
+        };
+        const {data: {documents}} = await ResultApi(params); console.log(documents);
+        setData(documents)
+        
+    } 
+        booksdata()
+    }, [keyword])
+
+    const keyvaluefunc = (e) => {setKeyValue(e.target.value); console.log(e.target.value)}
+    const putKeyWord = (e) => {
+        e.preventDefault()
+        setKeyword(keyvalue)
+        setChange(false)
+}    
+    
     return(
         <>
-        <Top />
+        <Top  />
         <Navigation />
+        {change ?
     <Body>
     <Bodypic></Bodypic>
     <Keyform>
         <Keytit>키워드를 입력하세요</Keytit>
         <Keyexp>고양이와 책을에서 키워드에 맞는 책을 읽고<br/> 나만의 서평을 작성해보세요</Keyexp>
-        <Form>
-        <div><Keyinput type="text"></Keyinput></div>
-        <Search>검색</Search>
+        <Form onSubmit={putKeyWord}>
+        <div><Keyinput type="text" value={keyvalue} onChange={keyvaluefunc}></Keyinput></div>
+        <Search onSubmit={putKeyWord}>검색</Search>
         </Form>
         </Keyform>
-    </Body>
+    </Body> : 
+    <Resultform>
+        <Resultname>'{keyvalue}' 검색한 결과</Resultname>
+
+    {data.map((book)=> <Resultbox>
+        <Bookimg src={book.thumbnail}></Bookimg>
+        <Bookcontainer>
+        <Booktitle>{book.title}</Booktitle>
+        <Bookauthors>{book.authors}</Bookauthors>
+        <Bookcontents>{book.contents}...</Bookcontents>
+        </Bookcontainer>
+        </Resultbox>)}
+    </Resultform>}
     </>
     )}
 
-export default Home
+export default withRouter(Home)
