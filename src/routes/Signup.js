@@ -101,10 +101,9 @@ color: white;
 `
 
 const Signup = ({history}) => {
-    const [nicknameState, setNickname] = useState('')
-    const [emailState, setEmail] = useState('')
-    const [passwordState, setPassword] = useState('')
-    const [signState, setSignup] = useState(false)
+    const [nickname, setNickname] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const onChange = (e) => {
         const {target: {value, name}} = e
@@ -116,8 +115,28 @@ const Signup = ({history}) => {
             setPassword(value)
         }
     }
-const onSubmit = (e) => {
-    /*let data = {
+
+// submit시 서버로 axios 요청하여 signup
+    const onSubmit = (e) => {
+      e.preventDefault()
+      axios.post("http://localhost:8080/signup", {
+        nickname: nickname,
+        password: password,
+        email: email
+    }).then(function (response) {
+        if(response.data.code == 0){ 
+          history.push("/login");
+        } else {
+            alert('fail to signup')
+            }
+    }).catch(function (error) {
+        console.log(error);
+        alert('fail to signup')
+    });}
+
+    // signup 제2의 방법 주석 처리
+/*const onSubmit = (e) => {
+    let data = {
             id: id,
             pw: pw
         }
@@ -129,9 +148,9 @@ const onSubmit = (e) => {
         })
         .then((res) => {
           console.log(res);
-        });*/
+        });
     e.preventDefault()
-    /*await axios.post('DB이름', {
+    await axios.post('DB이름', {
       params: {
         nickname : nicknameState,
         email : emailState,
@@ -140,6 +159,7 @@ const onSubmit = (e) => {
     }).then(()=> {alert('회원가입 성공!'); history.push('/login')})
 .catch(() => alert('회원가입 실패'))};
 */
+    
     return(
         <>
     <Top />
@@ -147,16 +167,16 @@ const onSubmit = (e) => {
     <Logintit>회원가입</Logintit>
     <Footprint1 src="footprint.png"></Footprint1>
     <Loginform onSubmit={onSubmit}>
-        <Nickname type="text" required placeholder='닉네임' name="nickname" value={nicknameState} onChange={onChange}></Nickname><br/>
-        <Email type="email" required placeholder='이메일' name="email" value={emailState} onChange={onChange}></Email><br/>
-        <Password type="password" required placeholder='비밀번호' name="password" value={passwordState} onChange={onChange}></Password><br/>
+        <Nickname type="text" required placeholder='닉네임' name="nickname" value={nickname} onChange={onChange}></Nickname><br/>
+        <Email type="email" required placeholder='이메일' name="email" value={email} onChange={onChange}></Email><br/>
+        <Password type="password" required placeholder='비밀번호' name="password" value={password} onChange={onChange}></Password><br/>
         <Loginbtn>회원가입</Loginbtn><br/>
         <Asksignup>이미 회원이신가요?</Asksignup>
         <Signupbtn><Slink to="/login">로그인 하기</Slink></Signupbtn>
     </Loginform>
     <Footprint2 src="footprint.png"></Footprint2>
     </>
-    )}
+    )
 
     }
 export default withRouter(Signup)
