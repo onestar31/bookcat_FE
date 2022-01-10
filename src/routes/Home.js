@@ -99,7 +99,28 @@ font-size: 23px;
 margin-bottom: 1rem;`
 
 const Bookcontents = styled.div`
-font-size: 19px;`
+font-size: 19px;
+width: 34rem;`
+
+const Bookurl = styled.a`
+text-decoration: none;
+margin-top: 1rem;
+font-size: 19px;
+color: #C05F5F;
+width: 1.7rem;
+border-bottom: 1px solid #C05F5F;`
+
+const Bookreview = styled.button`
+border: none;
+outline: none;
+font-family: inherit !important;
+font-size: 20px;
+width: 5rem;
+padding: 5px 0px;
+margin-top: 1rem;
+margin-left: 80%;
+text-align: center;
+background: #E8A5A5;`
 
 const Home = ({history}) => {
     const [keyword, setKeyword] = useState('꿈꿀 권리')
@@ -126,7 +147,14 @@ const Home = ({history}) => {
         e.preventDefault()
         setKeyword(keyvalue)
         setChange(false)
-}    
+} 
+    const toreview = (book) =>{
+        let id = book.isbn
+        history.push(`/write/${id}`)
+        window.localStorage.setItem('booktitle', JSON.stringify(book.title))
+        window.localStorage.setItem('bookauthors', JSON.stringify(book.authors))
+    }
+    
     
     return(
         <>
@@ -153,6 +181,8 @@ const Home = ({history}) => {
         <Booktitle>{book.title}</Booktitle>
         <Bookauthors>{book.authors}</Bookauthors>
         <Bookcontents>{book.contents}...</Bookcontents>
+        <Bookurl href={book.url}  target='_blank'>링크</Bookurl>
+        <Bookreview onClick={() => toreview(book)}>서평 쓰기</Bookreview>
         </Bookcontainer>
         </Resultbox>)}
     </Resultform>}
