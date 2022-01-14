@@ -174,7 +174,7 @@ const Signup = ({history}) => {
         <Asksignup>이미 회원이신가요?</Asksignup>
         <Signupbtn><Slink to="/login">로그인 하기</Slink></Signupbtn>
     </Loginform>
-    <Footprint2 src="footprint.png"></Footprint2>
+    <Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>
     </>
     )
 

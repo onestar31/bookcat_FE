@@ -15,7 +15,7 @@ font-family: 'YanoljaYacheR';
 
 const Bodypic = styled.div`
 position: absolute;
-background-image: url('mainbookself.jpeg');
+background-image: url(${process.env.PUBLIC_URL+'mainbookself.jpeg'});
 width: 1100px;
 height: 600px;
 opacity: 55%;

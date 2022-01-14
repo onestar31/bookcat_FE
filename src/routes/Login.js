@@ -123,7 +123,7 @@ const Login = () => {
         <Asksignup>아직 회원이 아니신가요?</Asksignup>
         <Signupbtn><Slink to="/signup">회원가입 하기</Slink></Signupbtn>
     </Loginform>
-    <Footprint2 src="footprint.png"></Footprint2>
+    <Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>
     </>
     )}
 

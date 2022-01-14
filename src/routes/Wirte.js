@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
@@ -88,6 +88,8 @@ const Write = ({history}) => {
     const [text, setText] = useState('')
     const [author, setAuthor] = useState('')
     const [data, setData] = useState('')
+    const authornum = window.localStorage.getItem('bookauthors').length
+
 
     const changeText = (e) =>{
         if (e.target.name==='rtitle'){
@@ -111,22 +113,28 @@ const Write = ({history}) => {
     const {data: {documents}} = await ResultApi(params); console.log(documents);
     setData(documents)
     } else {
+        let title = window.localStorage.getItem('booktitle')
+        let authors = window.localStorage.getItem('bookauthors').substring(1, authornum-1)
         const params = {
             target: 'title' & 'person',
-            query: (window.localStorage.getItem('booktitle'), window.localStorage.getItem('bookauthors')),
+            query: title, authors,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
     setData(documents)
     }
     try{
-    window.localStorage.setItem('btitle', JSON.stringify(data[0].title))
+    window.localStorage.setItem('btitle', JSON.stringify(data[0]).title)
     window.localStorage.setItem('bauthor', JSON.stringify(data[0].authors))
     window.localStorage.setItem('bpicture', JSON.stringify(data[0].thumbnail))
-    window.localStorage.setItem('bcontents', JSON.stringify(data[0].contents))}
-    catch { console.log('something is wrong')}
-    finally {console.log('it is finished')}
+    window.localStorage.setItem('bcontents', JSON.stringify(data[0].contents))
+    } catch { 
+        console.log('somethis is wrong')
+    } finally {
+        history.push('/review')
+    }
 } 
+
     //임시로 localstorage에 저장했지만 이 부분은 DB에 정보를 보내는 코드(post)로 바뀌어야 함
     const submitText = (e) => {
         e.preventDefault()
@@ -134,9 +142,9 @@ const Write = ({history}) => {
         window.localStorage.setItem('rinfo', JSON.stringify(info))
         window.localStorage.setItem('rauthor', JSON.stringify(author))
         window.localStorage.setItem('rtext', JSON.stringify(text))
-        history.push('/review')
-        try {
         booksdata()
+        try {
+        
         } finally {/*
         window.localStorage.setItem('btitle', JSON.stringify(data[0].title))
         window.localStorage.setItem('bauthor', JSON.stringify(data[0].authors))
@@ -144,6 +152,7 @@ const Write = ({history}) => {
         window.localStorage.setItem('bcontents', JSON.stringify(data[0].contents))
         */ console.log('done')}
     }
+
 
     return(
         <>
@@ -170,7 +179,7 @@ const Write = ({history}) => {
             </Titlebox>
             <Infobox type='text' placeholder='책 제목' name="rinfo" value={window.localStorage.getItem('booktitle')} onChange={changeText}>
             </Infobox>
-            <Infobox type='text' placeholder='지은이' name="rauthor" value={window.localStorage.getItem('bookauthors')} onChange={changeText}>
+            <Infobox type='text' placeholder='지은이' name="rauthor" value={window.localStorage.getItem('bookauthors').substring(1, authornum-1)} onChange={changeText}>
             </Infobox>
             <Textbox type='text' name="rtext" value={text} onChange={changeText}></Textbox>
             <Subm onClick={submitText}>등록</Subm>
