@@ -119,7 +119,7 @@ const Signup = ({history}) => {
 // submit시 서버로 axios 요청하여 signup
     const onSubmit = (e) => {
       e.preventDefault()
-      axios.post("http://localhost:8080/signup", {
+      axios.post("http://localhost:8000/signup", {
         nickname: nickname,
         password: password,
         email: email

@@ -16,8 +16,8 @@ font-family: 'YanoljaYacheR';
 const Bodypic = styled.div`
 position: absolute;
 background-image: url(${process.env.PUBLIC_URL+'mainbookself.jpeg'});
-width: 1100px;
-height: 600px;
+width: 68vw;
+height: 74vh;
 opacity: 55%;
 margin-left: 50%;
 transform: translateX(-50%);`
@@ -151,14 +151,18 @@ const Home = ({history}) => {
     const toreview = (book) =>{
         let id = book.isbn
         history.push(`/write/${id}`)
-        window.localStorage.setItem('booktitle', JSON.stringify(book.title))
-        window.localStorage.setItem('bookauthors', JSON.stringify(book.authors))
+        window.localStorage.setItem('id', book.isbn)
+        window.localStorage.setItem('booktitle', book.title)
+        window.localStorage.setItem('bookauthors', book.authors)
+        window.localStorage.setItem('bookimg', book.thumbnail)
+        window.localStorage.setItem('bookcontents', book.contents)
+
     }
     
     
     return(
         <>
-        <Top  />
+        <Top />
         <Navigation />
         {change ?
     <Body>
