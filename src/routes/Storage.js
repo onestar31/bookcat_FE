@@ -4,6 +4,7 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react/cjs/react.development'
 import axios from 'axios'
+import Nickname from 'components/Nickname'
 
 
 //서평 공간 구현
@@ -76,6 +77,7 @@ const Storage = () => {
 
     return(
         <>
+        <Nickname />
         <Top />
         <Navigation />
     <Body>

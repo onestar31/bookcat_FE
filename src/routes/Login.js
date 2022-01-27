@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import axios from 'axios'
+import Nickname from 'components/Nickname'
 
 //로그인 구현
 
@@ -88,9 +89,10 @@ text-decoration: none;
 color: white;
 `
 
-const Login = () => {
+const Login = ({history}) => {
     const [emailState, setEmail] = useState('')
     const [passwordState, setPassword] = useState('')
+    const [loginState, setLogin] = useState(false)
 
     const onChange = (e) => {
         const {target: {value, name}} = e
@@ -100,18 +102,29 @@ const Login = () => {
             setPassword(value)
         }
     }
+    //submit시 서버로 axios 요청하여 login
     const onSubmit = (e) => {
         e.preventDefault()
-        axios.post('DB이름', {
-          params: {
-            email : emailState,
-            password : passwordState
-          }
+        axios.post("http://localhost:8000/user/login", {
+            userEmail : emailState,
+            userPw : passwordState,
+        }).then(function(response){
+            console.log(response)
+            alert(response.data.message)
+            sessionStorage.setItem('nickname', emailState) //닉네임 받아오면 emailState 대신 nickname 넣기
+            sessionStorage.setItem('email', emailState)
+            sessionStorage.setItem('id', emailState) //비밀번호 바꾸기 위한 axios put 요청을 해당 id 주소로 보낼 때 필요
+            sessionStorage.setItem('pw', emailState) //비밀번호 바꾸기 위해 current pw를 확인하기 위해 필요 
+
+            window.location.replace('/')
+        }).catch(function(error){
+            console.log(error.response)
+            alert(error.response.data.message)
         })
-        axios.get('DB이름', {})
     }
     return(
         <>
+    <Nickname />
     <Top />
     <Navigation />
     <Logintit>로그인</Logintit>
@@ -127,4 +140,4 @@ const Login = () => {
     </>
     )}
 
-export default Login
+export default withRouter(Login)

@@ -31,6 +31,7 @@ color: black;`
 
 const Navigation = ({location:{pathname}}) => {
     const active = {color: 'white'}
+    const nickname = sessionStorage.getItem('nickname')
     return (
             <Unlist>
                 <List current={pathname==='/write'}><Slink activeStyle={active} to="/write">글쓰기</Slink></List>

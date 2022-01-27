@@ -2,11 +2,14 @@ import React from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { ResultApi } from '../ResultApi'
 import { useEffect, useState } from 'react/cjs/react.development'
 import axios from 'axios'
+import Nickname from 'components/Nickname'
+
 
 //서평 공간 구현
+const Loader = styled.div``
+
 
 const Body = styled.div`
 font-family: 'YanoljaYacheR';
@@ -111,7 +114,7 @@ font-size: 17px;`
 const Review = () => {
     const [data, setData] = useState('')
     const [loading, setLoading] = useState(true)
-    const id = window.localStorage.getItem('id')
+    const id = window.sessionStorage.getItem('id')
 
     useEffect(()=>{
         axios.get(`http://127:0.0.1:8000/review/${id}`)
@@ -143,9 +146,10 @@ useEffect(() => {
 
     return(
         <>
+        <Nickname />
         <Top />
         <Navigation />
-        {loading ? <div>hello</div> : 
+        {loading ? <Loader>Loading</Loader> : 
     <Body>
         <Reviewform>
             <ReviewTitle>{data.rtitle}</ReviewTitle>

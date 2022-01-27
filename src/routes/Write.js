@@ -6,6 +6,8 @@ import { useState } from 'react/cjs/react.development'
 import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
 import axios from 'axios'
+import Nickname from 'components/Nickname'
+
 
 //서평쓰기 폼 구현
 
@@ -84,8 +86,8 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
 const Write = ({history}) => {
-    const booktitle = window.localStorage.getItem('booktitle')
-    const bookauthor = window.localStorage.getItem('bookauthors')
+    const booktitle = window.sessionStorage.getItem('booktitle')
+    const bookauthor = window.sessionStorage.getItem('bookauthors')
     const [rtitle, setRtitle] = useState('')
     const [btitle, setBtitle] = useState(`${booktitle}`)
     const [text, setText] = useState('')
@@ -118,10 +120,10 @@ const Write = ({history}) => {
     const submitText = (e) => {
         e.preventDefault()
         try {  
-        window.localStorage.setItem('rtitle', (rtitle))
-        window.localStorage.setItem('rtext', (text))
-        window.localStorage.setItem('btitle', (btitle))
-        window.localStorage.setItem('rauthor', (author))
+        window.sessionStorage.setItem('rtitle', (rtitle))
+        window.sessionStorage.setItem('rtext', (text))
+        window.sessionStorage.setItem('btitle', (btitle))
+        window.sessionStorage.setItem('rauthor', (author))
             
         booksdata(btitle, author)
 
@@ -138,7 +140,7 @@ const Write = ({history}) => {
                 rtitle,
                 text
             }).then(function(response) {
-                window.localStorage.setItem('id', data.isbn)
+                window.sessionStorage.setItem('id', data.isbn)
                 console.log(response)
             }).catch(function(error) {console.log(error)
             }).finally(() => {
@@ -154,6 +156,7 @@ const Write = ({history}) => {
 
     return(
         <>
+        <Nickname />
         <Top />
         <Navigation />
         <Body>

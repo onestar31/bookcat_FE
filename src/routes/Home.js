@@ -5,6 +5,8 @@ import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import { ResultApi } from '../ResultApi'
 import {withRouter} from 'react-router-dom'
+import Nickname from 'components/Nickname'
+
 
 //메인 검색 화면 및 검색 결과 화면 구현
 
@@ -151,17 +153,18 @@ const Home = ({history}) => {
     const toreview = (book) =>{
         let id = book.isbn
         history.push(`/write/${id}`)
-        window.localStorage.setItem('id', book.isbn)
-        window.localStorage.setItem('booktitle', book.title)
-        window.localStorage.setItem('bookauthors', book.authors)
-        window.localStorage.setItem('bookimg', book.thumbnail)
-        window.localStorage.setItem('bookcontents', book.contents)
+        window.sessionStorage.setItem('id', book.isbn)
+        window.sessionStorage.setItem('booktitle', book.title)
+        window.sessionStorage.setItem('bookauthors', book.authors)
+        window.sessionStorage.setItem('bookimg', book.thumbnail)
+        window.sessionStorage.setItem('bookcontents', book.contents)
 
     }
     
     
     return(
         <>
+    <   Nickname />
         <Top />
         <Navigation />
         {change ?

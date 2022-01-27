@@ -4,6 +4,8 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import axios from 'axios'
+import Nickname from 'components/Nickname'
+
 
 //회원가입 구현
 
@@ -37,7 +39,7 @@ margin-left: auto;
 margin-right: auto;
 margin-top: 30px;`
 
-const Nickname = styled.input`
+const Nick = styled.input`
 margin: 80px 0 0 24px;
 width: 340px;
 font-size: 16px;
@@ -116,58 +118,34 @@ const Signup = ({history}) => {
         }
     }
 
+    
 // submit시 서버로 axios 요청하여 signup
     const onSubmit = (e) => {
       e.preventDefault()
-      axios.post("http://localhost:8000/signup", {
-        nickname: nickname,
-        password: password,
-        email: email
+        axios.post("http://localhost:8000/user/create", {
+        userName: nickname,
+        userEmail: email,
+        userPw: password,
     }).then(function (response) {
-        if(response.data.code == 0){ 
-          history.push("/login");
-        } else {
-            alert('fail to signup')
-            }
+        console.log(response)
+        alert(response.data.message)
+        history.push("/login");
     }).catch(function (error) {
-        console.log(error);
-        alert('fail to signup')
-    });}
+        console.log(error.response);
+        alert(error.response.data.message)
+    });
+    }
 
-    // signup 제2의 방법 주석 처리
-/*const onSubmit = (e) => {
-    let data = {
-            id: id,
-            pw: pw
-        }
-        axios
-        .post(url,  JSON.stringify(data), {
-          headers: {
-            "Content-Type": `application/json`,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        });
-    e.preventDefault()
-    await axios.post('DB이름', {
-      params: {
-        nickname : nicknameState,
-        email : emailState,
-        password : passwordState
-      }
-    }).then(()=> {alert('회원가입 성공!'); history.push('/login')})
-.catch(() => alert('회원가입 실패'))};
-*/
     
     return(
         <>
+    <Nickname />
     <Top />
     <Navigation />
     <Logintit>회원가입</Logintit>
     <Footprint1 src="footprint.png"></Footprint1>
     <Loginform onSubmit={onSubmit}>
-        <Nickname type="text" required placeholder='닉네임' name="nickname" value={nickname} onChange={onChange}></Nickname><br/>
+        <Nick type="text" required placeholder='닉네임' name="nickname" value={nickname} onChange={onChange}></Nick><br/>
         <Email type="email" required placeholder='이메일' name="email" value={email} onChange={onChange}></Email><br/>
         <Password type="password" required placeholder='비밀번호' name="password" value={password} onChange={onChange}></Password><br/>
         <Loginbtn>회원가입</Loginbtn><br/>

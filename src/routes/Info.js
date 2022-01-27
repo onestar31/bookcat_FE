@@ -2,6 +2,10 @@ import React from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
+import Nickname from 'components/Nickname'
+import axios from 'axios'
+import { useState } from 'react/cjs/react.development'
+
 
 //내 정보 구현
 
@@ -59,11 +63,17 @@ padding-left: 13px;
 width: 16rem;
 background: #F3CACA;
 height: 5.7rem;
-border-radius: 0.5rem;`
+border-radius: 0.5rem;
+`
 
 const Emailtit = styled.div`
 opacity: 60%;
 margin-top: 0.7rem;`
+
+const Useremail = styled.div`
+text-align: center;
+margin-top: 1vh;
+`
 
 const Pswform = styled.form`
 text-align: start;
@@ -109,8 +119,46 @@ font-size: 15px;
 
 
 const Info = () => {
+    const [newPw, setnewPw] = useState()
+    const [checkPw, setCheckPw] = useState()
+    const [curPw, setCurPw] = useState()
+
+    const email = sessionStorage.getItem('email')
+    const id = sessionStorage.getItem('id')
+    const pw = sessionStorage.getItem('pw')
+
+    const onChange = (e) => {
+        const {target: {value, name}} = e
+        if (name === 'curpw'){
+            setCurPw(value)
+        } else if (name === 'newpw') {
+            setnewPw(value)
+        } else {
+            setCheckPw(value)
+        }
+    }
+
+    const changePw = (e) => {
+        e.preventDefault()
+        if (pw === curPw && newPw === checkPw) {
+            axios.put(`http://localhost:8000/user/info/${id}`, {
+            userPw: newPw,
+          })
+          .then(function (response) {
+            console.log(response.message);
+          })
+          .catch(function (error) {
+            console.log(error.message);
+          });
+        } else {
+            alert('비밀번호를 확인해주세요')
+        }
+        
+    }
+
     return(
         <>
+        <Nickname />
         <Top />
         <Navigation />
     <Body>
@@ -119,19 +167,21 @@ const Info = () => {
             <NickEml>
                 <Nick>
                     <Nicktit>닉네임</Nicktit>
+                     {/* 닉네임 서버로 부터가져오기 */}
                 </Nick>
                 <Email>
                     <Emailtit>이메일</Emailtit>
+                    <Useremail>{email}</Useremail>
                 </Email>
             </NickEml>
             <Pswform>
                 <Pswtit>비밀번호 변경</Pswtit>
-                <Pswbox>
-                    <Boxone type='password' placeholder='현재 비밀번호'></Boxone>
-                    <Boxone type='password' placeholder='새 비밀번호'></Boxone>
-                    <Boxone type='password' placeholder='새 비밀번호 확인'></Boxone>
-                </Pswbox>
+                <Pswbox onSubmit={changePw}>
+                    <Boxone type='password' name='curpw' placeholder='현재 비밀번호' value={curPw} onChange={onChange}></Boxone>
+                    <Boxone type='password' name='newpw' placeholder='새 비밀번호' value={newPw} onChange={onChange}></Boxone>
+                    <Boxone type='password' name='checkpw' placeholder='새 비밀번호 확인' value={checkPw} onChange={onChange}></Boxone>
                 <Pswedit>비밀번호 변경</Pswedit>
+                </Pswbox>
             </Pswform>
             
         </Infoform>
