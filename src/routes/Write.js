@@ -140,17 +140,22 @@ const Write = ({history}) => {
 
         //장고에 서평 정보 post 보내는 api
             axios.post("http://127.0.0.1:8000/review", {
-                id : data.isbn,
+                //uid : sessionStorage.getItem('uid'),
+                bid : sessionStorage.getItem('id'),
+                text,
+
                 img : data.thumbnail,
                 info : data.contents,
                 btitle,
                 author,
                 rtitle,
-                text
             }).then(function(response) {
                 window.sessionStorage.setItem('id', data.isbn)
                 console.log(response)
-            }).catch(function(error) {console.log(error)
+                alert(response.data.message)
+            }).catch(function(error) {
+                console.log(error)
+                alert('문제가 발생했습니다.')
             }).finally(() => {
                 history.push('/review')
             })
