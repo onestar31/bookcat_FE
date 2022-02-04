@@ -19,7 +19,7 @@ align-content: center;
 const Title = styled.div`
 width: 8rem;
 font-size: 28px;
-margin-top: 3.7rem;
+margin-top: 2.2rem;
 margin-left: 50%;
 transform: translateX(-50%);
 text-align: center;

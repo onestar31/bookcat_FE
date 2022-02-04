@@ -21,7 +21,7 @@ align-content: center;`
 const Title = styled.div`
 width: 8rem;
 font-size: 28px;
-margin-top: 3.7rem;
+margin-top: 2.2rem;
 margin-left: 50%;
 transform: translateX(-50%);
 text-align: center;
@@ -86,13 +86,19 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
 const Write = ({history}) => {
-    const booktitle = window.sessionStorage.getItem('booktitle')
-    const bookauthor = window.sessionStorage.getItem('bookauthors')
+    const booktitle = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('booktitle') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
+    const bookauthor = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('bookauthors') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
     const [rtitle, setRtitle] = useState('')
     const [btitle, setBtitle] = useState(`${booktitle}`)
     const [text, setText] = useState('')
     const [author, setAuthor] = useState(`${bookauthor}`)
     const [data, setData] = useState('')
+
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = today.getMonth()
+    const date = today.getDate()
+    const day = year+'.'+month+'.'+date+'.'
 
     async function booksdata(btitle, author) {
         const params = {
@@ -101,7 +107,8 @@ const Write = ({history}) => {
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
-    await setData(documents)
+    await setData(documents[0])
+    
 } 
 
     const changeText = (e) =>{
@@ -124,8 +131,9 @@ const Write = ({history}) => {
         window.sessionStorage.setItem('rtext', (text))
         window.sessionStorage.setItem('btitle', (btitle))
         window.sessionStorage.setItem('rauthor', (author))
-            
+        window.sessionStorage.setItem('date', day)
         booksdata(btitle, author)
+
 
         //Review component에서 보여주기 위해 id를 임시로 저장하기
         
@@ -168,7 +176,7 @@ const Write = ({history}) => {
             </Infobox>
             <Infobox type='text' placeholder='지은이' name="rauthor" value={author} onChange={changeText}>
             </Infobox>
-            <Textbox type='text' name="rtext" value={text} onChange={changeText} maxLength='1000'></Textbox>
+            <Textbox type='text' name="rtext" value={text} onChange={changeText} maxLength='500'></Textbox>
             <Subm onClick={submitText}>등록</Subm>
         </Writeform>
     </Body> 

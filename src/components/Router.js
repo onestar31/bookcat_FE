@@ -9,6 +9,8 @@ import Signup from '../routes/Signup'
 import Storage from "../routes/Storage";
 import Write from "../routes/Write";
 import Review from '../routes/Review'
+import Edit from '../routes/Edit'
+import Detail from "routes/Detail";
 
 const Router = () => {
     return(
@@ -22,6 +24,8 @@ const Router = () => {
                 <PrivateRoute path='/write' component={Write} exact></PrivateRoute>
                 <PrivateRoute path='/info' component={Info} exact></PrivateRoute>
                 <PrivateRoute path='/review' component={Review} exact></PrivateRoute>
+                <PrivateRoute path='/detail' component={Detail} exact></PrivateRoute>
+                <PrivateRoute path='/edit' component={Edit} exact></PrivateRoute>
             </Switch>
         </BrowserRouter>
     )

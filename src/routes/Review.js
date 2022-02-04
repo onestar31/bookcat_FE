@@ -5,10 +5,14 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react/cjs/react.development'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
-
+import { ResultApi } from '../ResultApi'
+import { withRouter } from 'react-router-dom'
 
 //서평 공간 구현
-const Loader = styled.div``
+const Loader = styled.div`
+display: block;
+text-align: center;
+margin: 30vh 0;`
 
 
 const Body = styled.div`
@@ -20,7 +24,7 @@ align-content: center;
 align-items: center;`
 
 const Reviewform = styled.div`
-margin-top: 3rem;
+margin-top: 2rem;
 width: 50rem;
 height: 31rem;
 background: #F5E5E5;
@@ -48,7 +52,7 @@ width: 40rem;
 text-align: start;
 padding-left: 5.6rem;
 padding-top: 1rem;
-font-size: 20px;
+font-size: 19px;
 padding-bottom: 2rem;`
 
 const Bookinfo = styled.div`
@@ -90,7 +94,7 @@ const Btn = styled.div`
 display: flex;
 flex-direction: row;`
 
-const Edit = styled.button`
+const List = styled.button`
 margin-top: 1rem;
 margin-right: 1rem;
 width: 7.5rem;
@@ -99,24 +103,16 @@ background: #E8A5A5;
 border: none;
 outline: none;
 font-family: 'YanoljaYacheR' !important;
-font-size: 17px;`
+font-size: 17px;
+cursor: pointer;`
 
-const Delete = styled.button`
-margin-top: 1rem;
-width: 7.5rem;
-height: 2.3rem;
-background: #E8A5A5;
-border: none;
-outline: none;
-font-family: 'YanoljaYacheR' !important;
-font-size: 17px;`
 
-const Review = () => {
+const Review = ({history}) => {
     const [data, setData] = useState('')
     const [loading, setLoading] = useState(true)
     const id = window.sessionStorage.getItem('id')
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         axios.get(`http://127:0.0.1:8000/review/${id}`)
         .then((response) => {
             setData(...response.data)
@@ -125,33 +121,49 @@ const Review = () => {
         }).catch((error)=>{
             console.log(error)
         })
-    },[])
-    /*
+    },[])*/
+    
+    //api 가져오기 
     async function booksdata() {
-        let btitle = window.localStorage.getItem('btitle')
-        let author = window.localStorage.getItem('rauthor')
+        let btitle = window.sessionStorage.getItem('btitle')
+        let author = window.sessionStorage.getItem('rauthor')
         const params = {
             target: 'title' & 'person',
             query: btitle, author,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
-    setData(documents)
+    setData(documents[0])
     setLoading(false)
 } 
 useEffect(() => {
     booksdata()
 },[])
-*/
+
+const moveStorage = () => {
+    history.push('/storage')
+}
 
     return(
         <>
         <Nickname />
         <Top />
         <Navigation />
-        {loading ? <Loader>Loading</Loader> : 
+        {loading ? <Loader>Loading...</Loader> : 
     <Body>
         <Reviewform>
+            <ReviewTitle>{sessionStorage.getItem('rtitle')}</ReviewTitle>
+            <Bookinfo>
+                <Bookimg src={data.thumbnail}></Bookimg>
+                <Bookcontainer>
+                <Booktitle>{data.title}</Booktitle>
+                <Bookauthors>{data.authors}</Bookauthors>
+                <Bookcontents>{data.contents}...</Bookcontents>
+                </Bookcontainer>
+            </Bookinfo>
+            <Reviewtext>{sessionStorage.getItem('rtext')}</Reviewtext>
+        </Reviewform>
+        {/*<Reviewform>
             <ReviewTitle>{data.rtitle}</ReviewTitle>
             <Bookinfo>
                 <Bookimg src={data.img}></Bookimg>
@@ -162,14 +174,14 @@ useEffect(() => {
                 </Bookcontainer>
             </Bookinfo>
             <Reviewtext>{data.text}</Reviewtext>
-        </Reviewform>
+        </Reviewform>*/}
+        
         <Btn>
-       <Edit>수정</Edit>
-        <Delete>삭제</Delete>
+       <List onClick={moveStorage}>목록</List>
         </Btn>
     </Body>
     }
     </>
     )}
 
-export default Review
+export default withRouter(Review)

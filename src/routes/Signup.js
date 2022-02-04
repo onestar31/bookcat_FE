@@ -14,7 +14,7 @@ font-family: 'OTWelcomeRA';
 text-align: center;
 font-weight: 500;
 font-size: 23px;
-padding-top: 20px;
+padding-top: 2rem;
 
 `
 const Footprint1 = styled.img`
