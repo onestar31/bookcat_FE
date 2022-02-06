@@ -133,13 +133,14 @@ const Write = ({history}) => {
         window.sessionStorage.setItem('rauthor', (author))
         window.sessionStorage.setItem('date', day)
         booksdata(btitle, author)
+        // set uid
 
 
         //Review component에서 보여주기 위해 id를 임시로 저장하기
         
 
         //장고에 서평 정보 post 보내는 api
-            axios.post("http://127.0.0.1:8000/review/", {
+            axios.post("http://127.0.0.1:8000/review/write/", {
                 //uid : sessionStorage.getItem('uid'),
                 bid : sessionStorage.getItem('id'),
                 text,
