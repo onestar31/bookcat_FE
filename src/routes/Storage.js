@@ -84,9 +84,9 @@ const Storage = ({history}) => {
     const [noData, setNoData] = useState(true) 
 
     //장고로 부터 데이터 가져오는 api
-    /*
+    
     useEffect(()=>{
-        axios.get('http://127:0.0.1:8000/review')
+        axios.get('http://127.0.0.1:8000/review/')
         .then((response) => {
             setData(...response.data)
             setNoData(false)
@@ -94,7 +94,7 @@ const Storage = ({history}) => {
         }).catch((error)=>{
             console.log(error)
         })
-    },[])*/
+    },[])
 
     const moveDetail = () => {
         history.push('/detail')
@@ -111,11 +111,12 @@ const Storage = ({history}) => {
         /*
     datas.map((data)=> {
         <Storeform>
-                <Bookimg src={data.img}></Bookimg>
+                <Bookimg src={data.img}></Bookimg>  // bid 통해서 ResultApi에서 이미지 받아와야 함
                 <Bookcontainer>
-                <Writetitle>{data.rtitle}</Writetitle>
-                <Booktitle>{data.btitle}</Booktitle>
-                <Writecontent>{data.text}...</Writecontent>
+                <Writetitle>{data.rtitle}</Writetitle>  // 모델 수정 必
+                <Booktitle>{data.btitle}</Booktitle>    // bid 통해서 책 이름 받아오기
+                <Writecontent>{data.text}...</Writecontent> // text 받아오기
+                // rid 받아서 리뷰 구분할 필요 없을까?
                 </Bookcontainer>
         </Storeform>
         })*/
