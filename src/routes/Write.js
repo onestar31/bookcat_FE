@@ -142,14 +142,13 @@ const Write = ({history}) => {
         //장고에 서평 정보 post 보내는 api
             axios.post("http://127.0.0.1:8000/review/write/", {
                 //uid : sessionStorage.getItem('uid'),
-                bid : sessionStorage.getItem('id'),
+                bid : sessionStorage.getItem('id'),     // bid 가 null 이라고 뜸..
                 text,
-
+                rtitle,
                 img : data.thumbnail,
                 info : data.contents,
                 btitle,
                 author,
-                rtitle,
             }).then(function(response) {
                 window.sessionStorage.setItem('id', data.isbn)
                 console.log(response)
