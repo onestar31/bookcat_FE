@@ -108,11 +108,12 @@ const Detail = ({history}) => {
     const [data, setData] = useState([])
     const [bookdata, setBookdata] = useState([])
     const [loading, setLoading] = useState(true)
-    const {id} = useParams() //url의 /:id 부분
+    const {bookid} = useParams() //url의 /:id 부분
+    const userid = sessionStorage.getItem('email')
 
     //bid를 이용한 api로(?) 서평 정보 가져오기(이 때 userid를 같이 보내줘야하는지)
     useEffect(()=>{
-        axios.get(`http://127:0.0.1:8000/review/${id}`)
+        axios.get(`http://127:0.0.1:8000/review/${userid}/${bookid}`)  //api 임시로 설정해둔 것
         .then((response) => {
             setData(response.data)
             console.log(response.data)
