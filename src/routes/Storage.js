@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react/cjs/react.development'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { withRouter } from 'react-router-dom'
+import { ResultApi } from '../ResultApi'
 
 //서평 공간 구현
 
@@ -31,7 +32,7 @@ const Noform = styled.div`
 font-size: 20px;
 margin: 20vh 0;`
 
-const Storeform = styled.div`    
+const Storeform = styled.li`    
 font-family: 'YanoljaYacheR';
 display: flex;
 align-items: center;
@@ -80,26 +81,47 @@ margin-bottom: 0.3rem;
 `
 
 const Storage = ({history}) => {
-    const [datas, setData] = useState('')
+    const [datas, setData] = useState([]) 
+    const [bookdata, setBookdata] = useState([])
     const [noData, setNoData] = useState(true) 
 
     //장고로 부터 데이터 가져오는 api
-    
     useEffect(()=>{
         axios.get('http://127.0.0.1:8000/review/')
         .then((response) => {
-            setData(...response.data)
+            setData(response.data)
             setNoData(false)
-            console.log(response.data)
+            console.log((response.data))
         }).catch((error)=>{
             console.log(error)
         })
     },[])
 
-    const moveDetail = () => {
-        history.push('/detail')
-    }
+    //isbn으로 책 img 가져오기
+    /* function booksdata(data) {
+        const params = {
+            target: 'isbn',
+            query: data.bid,
+            size: 1,
+    };
+    const {data: {documents}} = ResultApi(params); console.log(documents); 
+    setBookdata(documents[0])
+    } 
 
+    useEffect(()=>{
+        if(datas!==''){
+            booksdata(data)
+        }
+    }, [datas]) */
+    
+     
+
+    //book id를 이용해 상세페이지로 이동 
+    const moveDetail = (data) => {
+        console.log(data)
+        history.push(`/detail/${data.bookId}`)
+    }
+   
     return(
         <>
         <Nickname />
@@ -107,30 +129,21 @@ const Storage = ({history}) => {
         <Navigation />
     <Body>
         <Title>서평 공간</Title>
-        {noData ? <Noform>작성한 서평이 없습니다</Noform> :
-        /*
-    datas.map((data)=> {
-        <Storeform>
-                <Bookimg src={data.img}></Bookimg>  // bid 통해서 ResultApi에서 이미지 받아와야 함
+        {noData ? <Noform>작성한 서평이 없습니다</Noform> : 
+        <ul>
+        {datas && datas.map((data)=> <Storeform key={data.id} onClick={() => moveDetail(data)}>
+                <Bookimg src={bookdata.thumbnail}></Bookimg>  
                 <Bookcontainer>
-                <Writetitle>{data.rtitle}</Writetitle>  // 모델 수정 必
-                <Booktitle>{data.btitle}</Booktitle>    // bid 통해서 책 이름 받아오기
-                <Writecontent>{data.text}...</Writecontent> // text 받아오기
-                // rid 받아서 리뷰 구분할 필요 없을까?
+                <Writetitle>{data.reviewTitle}</Writetitle>   {/*// 모델 수정 必 */}
+                <Booktitle>{data.bookId}</Booktitle>    
+                <Writecontent>{data.reviewTxt}...</Writecontent>
+               {/* rid 받아서 리뷰 구분할 필요 없을까?*/}
+               <Date>{data.reviewDate}</Date>
                 </Bookcontainer>
-        </Storeform>
-        })*/
-        <Storeform onClick={moveDetail}>
-                <Bookimg src={sessionStorage.bookimg}></Bookimg>
-                <Bookcontainer>
-                <Writetitle>{sessionStorage.rtitle}</Writetitle>
-                <Booktitle>{sessionStorage.btitle}</Booktitle>
-                <Writecontent>{sessionStorage.rtext.slice(0,240)}...</Writecontent>
-                <Date>{sessionStorage.date}</Date>
-                </Bookcontainer>
-        </Storeform>
-        }
-
+            </Storeform>
+        )}
+        </ul>
+    }
     </Body>
     </>
     )}

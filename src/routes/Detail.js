@@ -6,14 +6,13 @@ import { useEffect, useState } from 'react/cjs/react.development'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 
 //서평 공간 구현
 const Loader = styled.div`
 display: block;
 text-align: center;
 margin: 30vh 0;`
-
 
 const Body = styled.div`
 font-family: 'YanoljaYacheR';
@@ -37,16 +36,6 @@ padding-top: 2rem;
 padding-bottom: 1rem;
 font-size: 30px;
 `
-/*
-const Bookinfo = styled.div`
-border-top: 1px solid black;
-border-bottom: 1px solid black;
-height: 13rem;
-width: 40rem;
-margin-left: 50%;
-transform: translateX(-50%);
-`
-*/
 const Reviewtext = styled.div`
 width: 40rem;
 text-align: start;
@@ -116,36 +105,39 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
 const Detail = ({history}) => {
-    const [data, setData] = useState('')
+    const [data, setData] = useState([])
+    const [bookdata, setBookdata] = useState([])
     const [loading, setLoading] = useState(true)
-    const id = window.sessionStorage.getItem('id')
+    const {id} = useParams() //url의 /:id 부분
 
-    /*useEffect(()=>{
+    //bid를 이용한 api로(?) 서평 정보 가져오기(이 때 userid를 같이 보내줘야하는지)
+    useEffect(()=>{
         axios.get(`http://127:0.0.1:8000/review/${id}`)
         .then((response) => {
-            setData(...response.data)
+            setData(response.data)
             console.log(response.data)
-            setLoading(false)
+            setLoading(true)
         }).catch((error)=>{
             console.log(error)
         })
-    },[])*/
+    },[])
     
-    async function booksdata() {
-        let btitle = window.sessionStorage.getItem('btitle')
-        let author = window.sessionStorage.getItem('rauthor')
+    //bid로 책 정보 가져오기
+    async function booksdata(data) {
         const params = {
-            target: 'title' & 'person',
-            query: btitle, author,
+            target: 'isbn',
+            query: data.bid,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
-    setData(documents[0])
-    setLoading(false)
+    setBookdata(documents[0])
+    setLoading(true) //연동 이후 false 
 } 
+
 useEffect(() => {
-    booksdata()
-},[])
+    if (data!=='')
+    booksdata(data)
+},[data])
 
 const moveEdit = () => {
     history.push('/edit')
@@ -159,30 +151,17 @@ const moveEdit = () => {
         {loading ? <Loader>Loading...</Loader> : 
     <Body>
         <Reviewform>
-            <ReviewTitle>{sessionStorage.getItem('rtitle')}</ReviewTitle>
+            <ReviewTitle>{data.reviewTitle}</ReviewTitle>
             <Bookinfo>
-                <Bookimg src={data.thumbnail}></Bookimg>
+                <Bookimg src={bookdata.thumbnail}></Bookimg>
                 <Bookcontainer>
-                <Booktitle>{data.title}</Booktitle>
-                <Bookauthors>{data.authors}</Bookauthors>
-                <Bookcontents>{data.contents}...</Bookcontents>
+                <Booktitle>{bookdata.title}</Booktitle>
+                <Bookauthors>{bookdata.authors}</Bookauthors>
+                <Bookcontents>{bookdata.contents}...</Bookcontents>
                 </Bookcontainer>
             </Bookinfo>
-            <Reviewtext>{sessionStorage.getItem('rtext')}</Reviewtext>
+            <Reviewtext>{data.reviewTxt}</Reviewtext>
         </Reviewform>
-        {/*<Reviewform>
-            <ReviewTitle>{data.rtitle}</ReviewTitle>
-            <Bookinfo>
-                <Bookimg src={data.img}></Bookimg>
-                <Bookcontainer>
-                <Booktitle>{data.btitle}</Booktitle>
-                <Bookauthors>{data.author}</Bookauthors>
-                <Bookcontents>{data.info}...</Bookcontents>
-                </Bookcontainer>
-            </Bookinfo>
-            <Reviewtext>{data.text}</Reviewtext>
-        </Reviewform>*/}
-        
         <Btn>
        <Edit onClick={moveEdit}>수정</Edit>
         <Delete>삭제</Delete>

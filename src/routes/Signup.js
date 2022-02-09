@@ -143,7 +143,7 @@ const Signup = ({history}) => {
     <Top />
     <Navigation />
     <Logintit>회원가입</Logintit>
-    <Footprint1 src="footprint.png"></Footprint1>
+    {/*<Footprint1 src="footprint.png"></Footprint1>*/}
     <Loginform onSubmit={onSubmit}>
         <Nick type="text" required placeholder='닉네임' name="nickname" value={nickname} onChange={onChange}></Nick><br/>
         <Email type="email" required placeholder='이메일' name="email" value={email} onChange={onChange}></Email><br/>
@@ -152,7 +152,7 @@ const Signup = ({history}) => {
         <Asksignup>이미 회원이신가요?</Asksignup>
         <Signupbtn><Slink to="/login">로그인 하기</Slink></Signupbtn>
     </Loginform>
-    <Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>
+    {/*<Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>*/}
     </>
     )
 

@@ -114,7 +114,6 @@ const Login = ({history}) => {
             sessionStorage.setItem('nickname', emailState) //닉네임 받아오면 emailState 대신 nickname 넣기
             sessionStorage.setItem('email', emailState)
             sessionStorage.setItem('id', emailState) //비밀번호 바꾸기 위한 axios put 요청을 해당 id 주소로 보낼 때 필요
-            sessionStorage.setItem('pw', emailState) //비밀번호 바꾸기 위해 current pw를 확인하기 위해 필요 
 
             window.location.replace('/')
         }).catch(function(error){
@@ -128,7 +127,7 @@ const Login = ({history}) => {
     <Top />
     <Navigation />
     <Logintit>로그인</Logintit>
-    <Footprint1 src="footprint.png"></Footprint1>
+    {/*<Footprint1 src="footprint.png"></Footprint1>*/}
     <Loginform onSubmit={onSubmit}>
         <Email type="email" required placeholder='이메일' name='email' value={emailState} onChange={onChange}></Email><br/>
         <Password type="password" required placeholder='비밀번호' name='password' value={passwordState} onChange={onChange}></Password><br/>
@@ -136,7 +135,7 @@ const Login = ({history}) => {
         <Asksignup>아직 회원이 아니신가요?</Asksignup>
         <Signupbtn><Slink to="/signup">회원가입 하기</Slink></Signupbtn>
     </Loginform>
-    <Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>
+    {/*<Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>*/}
     </>
     )}
 

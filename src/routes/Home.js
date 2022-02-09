@@ -144,7 +144,7 @@ const Home = ({history}) => {
         booksdata()
     }, [keyword])
 
-    const keyvaluefunc = (e) => {setKeyValue(e.target.value); console.log(e.target.value)}
+    const keyvaluefunc = (e) => {setKeyValue(e.target.value);}
     const putKeyWord = (e) => {
         e.preventDefault()
         setKeyword(keyvalue)

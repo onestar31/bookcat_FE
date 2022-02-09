@@ -25,6 +25,7 @@ const Router = () => {
                 <PrivateRoute path='/info' component={Info} exact></PrivateRoute>
                 <PrivateRoute path='/review' component={Review} exact></PrivateRoute>
                 <PrivateRoute path='/detail' component={Detail} exact></PrivateRoute>
+                <PrivateRoute path='/detail/:id' component={Detail} exact></PrivateRoute>
                 <PrivateRoute path='/edit' component={Edit} exact></PrivateRoute>
             </Switch>
         </BrowserRouter>

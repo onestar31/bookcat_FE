@@ -3,7 +3,6 @@ import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react/cjs/react.development'
-import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
 import { withRouter } from 'react-router-dom'
@@ -13,7 +12,6 @@ const Loader = styled.div`
 display: block;
 text-align: center;
 margin: 30vh 0;`
-
 
 const Body = styled.div`
 font-family: 'YanoljaYacheR';
@@ -37,16 +35,6 @@ padding-top: 2rem;
 padding-bottom: 1rem;
 font-size: 30px;
 `
-/*
-const Bookinfo = styled.div`
-border-top: 1px solid black;
-border-bottom: 1px solid black;
-height: 13rem;
-width: 40rem;
-margin-left: 50%;
-transform: translateX(-50%);
-`
-*/
 const Reviewtext = styled.div`
 width: 40rem;
 text-align: start;
@@ -67,7 +55,6 @@ transform: translateX(-50%);
 border-top: 0.1rem solid black;
 border-bottom: 0.1rem solid black;
 `
-
 const Bookimg = styled.img`
 height: 90%;
 `
@@ -110,23 +97,11 @@ cursor: pointer;`
 const Review = ({history}) => {
     const [data, setData] = useState('')
     const [loading, setLoading] = useState(true)
-    const id = window.sessionStorage.getItem('id')
+    const btitle = window.sessionStorage.getItem('btitle')
+    const author = window.sessionStorage.getItem('rauthor')
 
-    /*useEffect(()=>{
-        axios.get(`http://127:0.0.1:8000/review/${id}`)
-        .then((response) => {
-            setData(...response.data)
-            console.log(response.data)
-            setLoading(false)
-        }).catch((error)=>{
-            console.log(error)
-        })
-    },[])*/
-    
-    //api 가져오기 
+    //카카오 api 가져오기 
     async function booksdata() {
-        let btitle = window.sessionStorage.getItem('btitle')
-        let author = window.sessionStorage.getItem('rauthor')
         const params = {
             target: 'title' & 'person',
             query: btitle, author,
@@ -134,12 +109,14 @@ const Review = ({history}) => {
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
     setData(documents[0])
-    setLoading(false)
 } 
+
 useEffect(() => {
     booksdata()
+    setLoading(false)
 },[])
 
+//서평 공간으로 이동
 const moveStorage = () => {
     history.push('/storage')
 }
@@ -162,20 +139,7 @@ const moveStorage = () => {
                 </Bookcontainer>
             </Bookinfo>
             <Reviewtext>{sessionStorage.getItem('rtext')}</Reviewtext>
-        </Reviewform>
-        {/*<Reviewform>
-            <ReviewTitle>{data.rtitle}</ReviewTitle>
-            <Bookinfo>
-                <Bookimg src={data.img}></Bookimg>
-                <Bookcontainer>
-                <Booktitle>{data.btitle}</Booktitle>
-                <Bookauthors>{data.author}</Bookauthors>
-                <Bookcontents>{data.info}...</Bookcontents>
-                </Bookcontainer>
-            </Bookinfo>
-            <Reviewtext>{data.text}</Reviewtext>
-        </Reviewform>*/}
-        
+        </Reviewform>        
         <Btn>
        <List onClick={moveStorage}>목록</List>
         </Btn>
