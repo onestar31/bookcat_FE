@@ -7,8 +7,8 @@ import { ResultApi } from '../ResultApi'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { useForm } from 'react-hook-form'
-import { reviewdataAtom } from 'components/Atom'
-import { useRecoilValue } from 'recoil'
+import { reviewdataAtom, bookdataAtom, writedataAtom } from 'components/Atom'
+import { useRecoilValue, useRecoilState } from 'recoil'
 
 //서평쓰기 폼 구현
 
@@ -81,32 +81,43 @@ font-size: 17px;`
 
 const Edit = ({history}) => {
     const [bookdata, setBookData] = useState('')
+    const [change, setChange] = useState(false)
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
-    const reviewdata = useRecoilValue(reviewdataAtom) 
+    const reviewvalue = useRecoilValue(reviewdataAtom) 
+    const bookvalue = useRecoilValue(bookdataAtom)
+    const [writedata, setWriteData] = useRecoilState(writedataAtom)
 
     useEffect(()=>{
-        booksdata(reviewdata[0].isbn)
+        booksdata(reviewvalue[0].isbn)
     },[])
+
+    useEffect(()=>{
+        if (change){
+        axios.post("http://127.0.0.1:8000/edit/", { //url edit으로 바꿔줘야 할 것
+        uid : sessionStorage.getItem('uid'),
+        bid : bookdata.isbn, 
+        rtitle : writedata[0].writeTitle,
+        date : reviewvalue[0].reviewDate, //날짜는 예전 꺼 그대로
+        rtext: writedata[0].writeTxt,
+        /* rate :  미완입니다*/ 
+        //rid //review id 대신에 bid로 할 수 있을까 
+    }).then(function(response) {
+        console.log(response)
+        alert(response.data.message)
+    }).catch(function(error) {
+        console.log(error)
+        alert('문제가 발생했습니다.')
+    }).finally(() => {
+        history.push('/review')
+    })}
+    }, [change])
 
         //onSubmit를 한 경우 시행되는 코드 
     const writeSubmit = (data) => {
-        axios.post("http://127.0.0.1:8000/edit/", { //url edit으로 바꿔줘야 할 것
-                uid : sessionStorage.getItem('uid'),
-                bid : bookdata.isbn, 
-                rtitle : data.rtitle,
-                date : reviewdata[0].reviewDate, //날짜는 예전 꺼 그대로
-                rtext: data.rtext,
-                /* rate :  미완입니다*/ 
-                //rid //review id 대신에 bid로 할 수 있을까 
-            }).then(function(response) {
-                console.log(response)
-                alert(response.data.message)
-            }).catch(function(error) {
-                console.log(error)
-                alert('문제가 발생했습니다.')
-            }).finally(() => {
-               history.push('/review')
-            })}
+        setWriteData(()=> [{'writeTitle': data.rtitle, 'writeTxt': data.rtext}])
+        setBookData(()=> [{'bookTitle': data.btitle, 'bookAuthors': data.bauthor}])
+        setChange(true)
+        }
 
     //서평 책 정보 카카오 api로 불러오기 함수
     async function booksdata(word) {
@@ -127,10 +138,10 @@ const Edit = ({history}) => {
         <Body>
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
-            <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewdata[0].reviewTitle}></Inputbox>
+            <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
             <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={bookdata?.title}></Inputbox>
             <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={bookdata?.authors}></Inputbox>
-            <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewdata[0].reviewTxt}></Textbox>
+            <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewvalue[0].reviewTxt}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>수정</Subm>
         </Writeform>
     </Body> 
