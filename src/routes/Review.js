@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react/cjs/react.development'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
 import { withRouter } from 'react-router-dom'
+import { bookdataAtom } from 'components/Atom'
+import { writedataAtom } from 'components/Atom'
+import { useRecoilValue } from 'recoil'
 
 //서평 공간 구현
 const Loader = styled.div`
@@ -97,29 +100,29 @@ cursor: pointer;`
 const Review = ({history}) => {
     const [data, setData] = useState('')
     const [loading, setLoading] = useState(true)
-    const btitle = window.sessionStorage.getItem('btitle')
-    const author = window.sessionStorage.getItem('rauthor')
+    const bookvalue = useRecoilValue(bookdataAtom)
+    const writevalue = useRecoilValue(writedataAtom)
 
     //카카오 api 가져오기 
-    async function booksdata() {
+    async function booksdata(title, author) {
         const params = {
             target: 'title' & 'person',
-            query: btitle, author,
+            query: title, author,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
     setData(documents[0])
 } 
 
-useEffect(() => {
-    booksdata()
-    setLoading(false)
-},[])
+    useEffect(() => {
+        booksdata(bookvalue[0].bookTitle, bookvalue[0].bookAuthors)
+        setLoading(false)
+    },[])
 
-//서평 공간으로 이동
-const moveStorage = () => {
-    history.push('/storage')
-}
+    //서평 공간으로 이동
+    const moveStorage = () => {
+        history.push('/storage')
+    }
 
     return(
         <>
@@ -129,7 +132,7 @@ const moveStorage = () => {
         {loading ? <Loader>Loading...</Loader> : 
     <Body>
         <Reviewform>
-            <ReviewTitle>{sessionStorage.getItem('rtitle')}</ReviewTitle>
+            <ReviewTitle>{writevalue[0].writeTitle}</ReviewTitle>
             <Bookinfo>
                 <Bookimg src={data.thumbnail}></Bookimg>
                 <Bookcontainer>
@@ -138,7 +141,7 @@ const moveStorage = () => {
                 <Bookcontents>{data.contents}...</Bookcontents>
                 </Bookcontainer>
             </Bookinfo>
-            <Reviewtext>{sessionStorage.getItem('rtext')}</Reviewtext>
+            <Reviewtext>{writevalue[0].writeTxt}</Reviewtext>
         </Reviewform>        
         <Btn>
        <List onClick={moveStorage}>목록</List>

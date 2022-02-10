@@ -7,6 +7,9 @@ import { ResultApi } from '../ResultApi'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { useForm } from 'react-hook-form'
+import { bookdataAtom } from 'components/Atom'
+import { writedataAtom } from 'components/Atom'
+import { useRecoilValue, useRecoilState } from 'recoil'
 
 //서평쓰기 폼 구현
 
@@ -78,25 +81,27 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
 const Write = ({history}) => {
-    const booktitle = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('booktitle') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
-    const bookauthor = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('bookauthors') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
+    
+    const [bookdata, setBookData] = useRecoilState(bookdataAtom)
+    const [writedata, setWriteData] = useRecoilState(writedataAtom)
 
-    const [datas, setDatas] = useState('')
-    const [writeData, setWriteData] = useState('')
+    const booktitle = (history.location.pathname === '/write') ? '' : bookdata[0].bookTitle //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
+    const bookauthor = (history.location.pathname === '/write') ? '' : bookdata[0].bookAuthors //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
+
+    const [change, setChange] = useState(false)
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용 //new 주석
 
     //datas 상태가 변할 때 시행되는 장고로 데이터 post 하는 코드
         useEffect(()=> {
-            if (datas !== '') {
+            if (change){
             axios.post("http://127.0.0.1:8000/review/", {
-                uid : sessionStorage.getItem('email'),
-                bid : datas.isbn,
-                rtitle : writeData.rtitle,
+                uid : sessionStorage.getItem('email'), //email을 uid로 바꾸기
+                bid : bookdata.isbn,
+                rtitle : writedata.writeTitle,
                 date : day,
-                rtext: writeData.rtext,
+                rtext: writedata.writeTxt,
                 /* rate :  미완입니다*/ 
                 //rid //review id 대신에 bid로 할 수 있을까 
-
             }).then(function(response) {
                 console.log(response)
                 alert(response.data.message)
@@ -105,22 +110,17 @@ const Write = ({history}) => {
                 alert('문제가 발생했습니다.')
             }).finally(() => {
                history.push('/review')
+               console.log(bookdata)
             })}
-        },[datas])
+        },[change])
 
         //onSubmit를 한 경우 시행되는 코드 
     const writeSubmit = async (data) => {
-        try{
-        setWriteData(data)
-        window.sessionStorage.setItem('rtitle', (data.rtitle)) //서평 작성 정보 sessionStorage에 저장
-        window.sessionStorage.setItem('bauthor', (data.bauthor)) //rauthor를 bauthor로 바꿈
-        window.sessionStorage.setItem('btitle', (data.btitle))
-        window.sessionStorage.setItem('rtext', (data.rtext))
-        window.sessionStorage.setItem('day', day)
-        await booksdata(data.btitle, data.bauthor)
-        } catch {
-            console.log('somethis is wrong')
-        } 
+        setWriteData(()=> [{'writeTitle': data.rtitle, 'writeTxt': data.rtext}])
+        if (history.location.pathname === '/write'){
+        setBookData(()=> [{'bookTitle': data.btitle, 'bookAuthors': data.bauthor}])
+        }
+        setChange(true)
     }
 
     //서평 작성 날짜 
@@ -130,17 +130,6 @@ const Write = ({history}) => {
     const date = today.getDate()
     const rid = today.getTime()
     const day = year+'.'+month+'.'+(date+1)+'.'
-
-    //서평 책 정보 카카오 api로 불러오기 함수
-    async function booksdata(btitle, bauthor) {
-        const params = {
-            target: 'title' & 'person',
-            query: btitle, bauthor,
-            size: 1,
-    };
-    const {data: {documents}} = await ResultApi(params); console.log(documents); 
-    setDatas(documents[0])
-    } 
      
     return(
         <>

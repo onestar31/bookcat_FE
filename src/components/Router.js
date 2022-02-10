@@ -11,12 +11,14 @@ import Write from "../routes/Write";
 import Review from '../routes/Review'
 import Edit from '../routes/Edit'
 import Detail from "routes/Detail";
+import SearchResult from "routes/SearchResult";
 
 const Router = () => {
     return(
         <BrowserRouter>
             <Switch>
                 <PublicRoute path='/' component={Home} exact></PublicRoute>
+                <PublicRoute path='/searchresult' component={SearchResult} exact></PublicRoute>
                 <PublicRoute restricted path='/login' component={Login}  exact></PublicRoute>
                 <PublicRoute restricted path='/signup' component={Signup} exact></PublicRoute>
                 <PrivateRoute path='/storage' component={Storage} exact></PrivateRoute>

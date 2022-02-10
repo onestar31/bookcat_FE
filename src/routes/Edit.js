@@ -87,7 +87,7 @@ const Write = ({history}) => {
     //datas 상태가 변할 때 시행되는 장고로 데이터 post 하는 코드
         useEffect(()=> {
             if (datas !== '') {
-            axios.post("http://127.0.0.1:8000/review/", {
+            axios.post("http://127.0.0.1:8000/review/", { //url edit으로 바꿔줘야 할 것
                 uid : sessionStorage.getItem('email'),
                 bid : datas.isbn,
                 rtitle : writeData.rtitle,

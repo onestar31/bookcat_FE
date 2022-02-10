@@ -6,7 +6,8 @@ import Top from '../components/Top'
 import { ResultApi } from '../ResultApi'
 import {withRouter} from 'react-router-dom'
 import Nickname from 'components/Nickname'
-
+import {bookdataAtom} from 'components/Atom'
+import {useSetRecoilState} from 'recoil' 
 
 //메인 검색 화면 및 검색 결과 화면 구현
 
@@ -124,40 +125,50 @@ margin-left: 80%;
 text-align: center;
 background: #E8A5A5;`
 
-const Home = ({history}) => {
-    const [keyword, setKeyword] = useState('꿈꿀 권리')
-    const [keyvalue, setKeyValue] = useState('')
-    const [data, setData] = useState('data')
-    const [change, setChange] = useState(true)
+const SearchResult = ({history}) => {
+    const [data, setData] = useState([])
+    const keyword = window.sessionStorage.getItem('keyword')
+    const setBookData = useSetRecoilState(bookdataAtom)
 
-    const keyvaluefunc = (e) => {setKeyValue(e.target.value);}
-
-    const putKeyWord = (e) => {
-        e.preventDefault()
-        if (keyvalue === ''){
-            alert('키워드를 입력해주세요')
-        } else {
-        window.sessionStorage.setItem('keyword', keyvalue)
-        history.push('/searchresult')
-    }} 
+    async function booksdata(keyword) {
+        const params = {
+            target: 'title',
+            query: keyword,
+            size: 5,
+    };
+    const {data: {documents}} = await ResultApi(params); console.log(documents);
+    setData(documents)
+    
+} 
+    useEffect (() => {
+        booksdata(keyword)
+    }, [])
+    
+    const toreview = (book) =>{
+        setBookData(()=> [{'isbn': book.isbn, 'bookTitle': book.title, 'bookAuthors': book.authors}])
+        let id = book.isbn
+        history.push(`/write/${id}`)
+    }
     
     return(
         <>
     <   Nickname />
         <Top />
         <Navigation />
-    <Body>
-    <Bodypic></Bodypic>
-    <Keyform>
-        <Keytit>키워드를 입력하세요</Keytit>
-        <Keyexp>고양이와 책을에서 키워드에 맞는 책을 읽고<br/> 나만의 서평을 작성해보세요</Keyexp>
-        <Form onSubmit={putKeyWord}>
-        <div><Keyinput type="text" value={keyvalue} onChange={keyvaluefunc}></Keyinput></div>
-        <Search onSubmit={putKeyWord}>검색</Search>
-        </Form>
-        </Keyform>
-    </Body>
+    <Resultform>
+        <Resultname>'{keyword}' 검색한 결과</Resultname> 
+    {data.map((book)=> <Resultbox key={book.isbn}>
+        <Bookimg src={book.thumbnail}></Bookimg>
+        <Bookcontainer>
+        <Booktitle>{book.title}</Booktitle>
+        <Bookauthors>{book.authors}</Bookauthors>
+        <Bookcontents>{book.contents}...</Bookcontents>
+        <Bookurl href={book.url}  target='_blank'>링크</Bookurl>
+        <Bookreview onClick={() => toreview(book)}>서평 쓰기</Bookreview>
+        </Bookcontainer>
+        </Resultbox>)}
+    </Resultform>
     </>
     )}
 
-export default withRouter(Home)
+export default withRouter(SearchResult)

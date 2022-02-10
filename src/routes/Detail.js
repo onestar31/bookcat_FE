@@ -7,7 +7,7 @@ import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
 import { withRouter, useParams } from 'react-router-dom'
-import { reviewdataAtom } from 'Atom'
+import { reviewdataAtom } from 'components/Atom'
 import { useRecoilValue } from 'recoil'
 
 //서평 공간 구현

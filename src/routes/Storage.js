@@ -7,7 +7,7 @@ import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
-import { reviewdataAtom } from 'Atom'
+import { reviewdataAtom } from 'components/Atom'
 import { useSetRecoilState, useRecoilState } from "recoil"
 
 
@@ -87,7 +87,7 @@ const Storage = ({history}) => {
     const [datas, setData] = useState([]) 
     const [bookdata, setBookdata] = useState([])
     const [noData, setNoData] = useState(true) 
-    const [reviewdata, setreviewdata] = useRecoilState(reviewdataAtom)
+    const setreviewdata = useSetRecoilState(reviewdataAtom)
 
 
     //장고로 부터 데이터 가져오는 api
