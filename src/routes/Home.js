@@ -125,10 +125,7 @@ text-align: center;
 background: #E8A5A5;`
 
 const Home = ({history}) => {
-    const [keyword, setKeyword] = useState('꿈꿀 권리')
     const [keyvalue, setKeyValue] = useState('')
-    const [data, setData] = useState('data')
-    const [change, setChange] = useState(true)
 
     const keyvaluefunc = (e) => {setKeyValue(e.target.value);}
 

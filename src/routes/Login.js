@@ -111,11 +111,11 @@ const Login = ({history}) => {
         }).then(function(response){
             console.log(response.data)
             alert(response.data.message)
-            sessionStorage.setItem('nickname', emailState) //닉네임 받아오면 emailState 대신 nickname 넣기
-            sessionStorage.setItem('email', emailState)
-            sessionStorage.setItem('id', emailState) //비밀번호 바꾸기 위한 axios put 요청을 해당 id 주소로 보낼 때 필요
+            sessionStorage.setItem('nickname', response.data.userName) //닉네임 받아오면 emailState 대신 nickname 넣기
+            sessionStorage.setItem('email', response.data.userEmail)
+            sessionStorage.setItem('uid', response.data.uid) //비밀번호 바꾸기 위한 axios put 요청을 해당 id 주소로 보낼 때 필요
 
-           /*  window.location.replace('/') */
+           window.location.replace('/')
         }).catch(function(error){
             console.log(error.response)
             alert(error.response.data.message)

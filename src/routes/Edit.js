@@ -7,6 +7,8 @@ import { ResultApi } from '../ResultApi'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { useForm } from 'react-hook-form'
+import { reviewdataAtom } from 'components/Atom'
+import { useRecoilValue } from 'recoil'
 
 //서평쓰기 폼 구현
 
@@ -77,22 +79,23 @@ outline: none;
 font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
-const Write = ({history}) => {
-    const booktitle = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('booktitle') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
-    const bookauthor = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('bookauthors') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
-    const [datas, setDatas] = useState('')
-    const [writeData, setWriteData] = useState('')
+const Edit = ({history}) => {
+    const [bookdata, setBookData] = useState('')
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
+    const reviewdata = useRecoilValue(reviewdataAtom) 
 
-    //datas 상태가 변할 때 시행되는 장고로 데이터 post 하는 코드
-        useEffect(()=> {
-            if (datas !== '') {
-            axios.post("http://127.0.0.1:8000/review/", { //url edit으로 바꿔줘야 할 것
-                uid : sessionStorage.getItem('email'),
-                bid : datas.isbn,
-                rtitle : writeData.rtitle,
-                date : day,
-                rtext: writeData.rtext,
+    useEffect(()=>{
+        booksdata(reviewdata[0].isbn)
+    },[])
+
+        //onSubmit를 한 경우 시행되는 코드 
+    const writeSubmit = (data) => {
+        axios.post("http://127.0.0.1:8000/edit/", { //url edit으로 바꿔줘야 할 것
+                uid : sessionStorage.getItem('uid'),
+                bid : bookdata.isbn, 
+                rtitle : data.rtitle,
+                date : reviewdata[0].reviewDate, //날짜는 예전 꺼 그대로
+                rtext: data.rtext,
                 /* rate :  미완입니다*/ 
                 //rid //review id 대신에 bid로 할 수 있을까 
             }).then(function(response) {
@@ -104,40 +107,16 @@ const Write = ({history}) => {
             }).finally(() => {
                history.push('/review')
             })}
-        },[datas])
-
-        //onSubmit를 한 경우 시행되는 코드 
-    const writeSubmit = async (data) => {
-        try{
-        setWriteData(data)
-        window.sessionStorage.setItem('rtitle', (data.rtitle)) //서평 작성 정보 sessionStorage에 저장
-        window.sessionStorage.setItem('bauthor', (data.bauthor)) //rauthor를 bauthor로 바꿈
-        window.sessionStorage.setItem('btitle', (data.btitle))
-        window.sessionStorage.setItem('rtext', (data.rtext))
-        window.sessionStorage.setItem('day', day)
-        await booksdata(data.btitle, data.bauthor)
-        } catch {
-            console.log('somethis is wrong')
-        } 
-    }
-
-    //서평 작성 날짜 
-    const today = new Date()
-    const year = today.getFullYear()
-    const month = today.getMonth()
-    const date = today.getDate()
-    const rid = today.getTime()
-    const day = year+'.'+month+'.'+(date+1)+'.'
 
     //서평 책 정보 카카오 api로 불러오기 함수
-    async function booksdata(btitle, bauthor) {
+    async function booksdata(word) {
         const params = {
-            target: 'title' & 'person',
-            query: btitle, bauthor,
+            target: 'isbn',
+            query: word,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents); 
-    setDatas(documents[0])
+    setBookData(documents[0])
     } 
      
     return(
@@ -148,14 +127,14 @@ const Write = ({history}) => {
         <Body>
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
-            <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})}></Inputbox>
-            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={booktitle}></Inputbox>
-            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={bookauthor}></Inputbox>
-            <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})}></Textbox>
+            <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewdata[0].reviewTitle}></Inputbox>
+            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={bookdata?.title}></Inputbox>
+            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={bookdata?.authors}></Inputbox>
+            <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewdata[0].reviewTxt}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>수정</Subm>
         </Writeform>
     </Body> 
     </>
     )}
 
-export default withRouter(Write)
+export default withRouter(Edit)

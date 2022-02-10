@@ -74,6 +74,7 @@ const Useremail = styled.div`
 text-align: center;
 margin-top: 1vh;
 `
+const Usernick = styled(Useremail)``
 
 const Pswform = styled.form`
 text-align: start;
@@ -115,15 +116,13 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 15px;
 `
 
-
-
-
 const Info = () => {
     const [newPw, setnewPw] = useState()
     const [checkPw, setCheckPw] = useState()
     const [curPw, setCurPw] = useState()
 
     const email = sessionStorage.getItem('email')
+    const nickname = sessionStorage.getItem('nickname')
     const id = sessionStorage.getItem('id')
     const pw = sessionStorage.getItem('pw')
 
@@ -167,7 +166,7 @@ const Info = () => {
             <NickEml>
                 <Nick>
                     <Nicktit>닉네임</Nicktit>
-                     {/* 닉네임 서버로 부터가져오기 */}
+                    <Usernick>{nickname}</Usernick>
                 </Nick>
                 <Email>
                     <Emailtit>이메일</Emailtit>

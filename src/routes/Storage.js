@@ -84,7 +84,7 @@ margin-bottom: 0.3rem;
 `
 
 const Storage = ({history}) => {
-    const [datas, setData] = useState([]) 
+    const [datas, setDatas] = useState([]) 
     const [bookdata, setBookdata] = useState([])
     const [noData, setNoData] = useState(true) 
     const setreviewdata = useSetRecoilState(reviewdataAtom)
@@ -94,7 +94,7 @@ const Storage = ({history}) => {
     useEffect(()=>{
         axios.get('http://127.0.0.1:8000/review/')
         .then((response) => {
-            setData(response.data)
+            setDatas(response.data)
             setNoData(false)
             console.log((response.data))
         }).catch((error)=>{
@@ -103,22 +103,21 @@ const Storage = ({history}) => {
     },[])
 
     //isbn으로 책 img 가져오기
-    /* function booksdata(data) {
+    /* function booksdata(word) {
         const params = {
             target: 'isbn',
-            query: data.bid,
+            query: word.bookId,
             size: 1,
     };
     const {data: {documents}} = ResultApi(params); console.log(documents); 
     setBookdata(documents[0])
-    } 
+    }  
 
     useEffect(()=>{
         if(datas!==''){
-            booksdata(data)
+            booksdata(datas)
         }
-    }, [datas]) */
-    
+    }, [datas])*/
      
 
     //book id를 이용해 상세페이지로 이동 
