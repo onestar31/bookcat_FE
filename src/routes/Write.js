@@ -80,7 +80,7 @@ font-size: 17px;`
 const Write = ({history}) => {
     const booktitle = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('booktitle') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
     const bookauthor = (history.location.pathname === '/write') ? '' : window.sessionStorage.getItem('bookauthors') //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
-<<<<<<< HEAD
+
     const [datas, setDatas] = useState('')
     const [writeData, setWriteData] = useState('')
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
@@ -96,69 +96,7 @@ const Write = ({history}) => {
                 rtext: writeData.rtext,
                 /* rate :  미완입니다*/ 
                 //rid //review id 대신에 bid로 할 수 있을까 
-=======
-    const [rtitle, setRtitle] = useState('')
-    const [btitle, setBtitle] = useState(`${booktitle}`)
-    const [text, setText] = useState('')
-    const [author, setAuthor] = useState(`${bookauthor}`)
-    const [data, setData] = useState('')
 
-    const today = new Date()
-    const year = today.getFullYear()
-    const month = today.getMonth()
-    const date = today.getDate()
-    const day = year+'.'+month+'.'+date+'.'
-
-    async function booksdata(btitle, author) {
-        const params = {
-            target: 'title' & 'person',
-            query: btitle, author,
-            size: 1,
-    };
-    const {data: {documents}} = await ResultApi(params); console.log(documents);
-    await setData(documents[0])
-    
-} 
-
-    const changeText = (e) =>{
-        if (e.target.name==='rtitle'){
-        setRtitle(e.target.value)
-    }else if (e.target.name==='btitle'){
-        setBtitle(e.target.value)
-    } else if (e.target.name==='rtext'){
-        setText(e.target.value)
-    } else {
-        setAuthor(e.target.value)
-    }
-    }
-
-    //임시로 localstorage에 저장했지만 이 부분은 DB에 정보를 보내는 코드(post)로 바뀌어야 함
-    const submitText = (e) => {
-        e.preventDefault()
-        try {  
-        window.sessionStorage.setItem('rtitle', (rtitle))
-        window.sessionStorage.setItem('rtext', (text))
-        window.sessionStorage.setItem('btitle', (btitle))
-        window.sessionStorage.setItem('rauthor', (author))
-        window.sessionStorage.setItem('date', day)
-        booksdata(btitle, author)
-        // set uid
-
-
-        //Review component에서 보여주기 위해 id를 임시로 저장하기
-        
-
-        //장고에 서평 정보 post 보내는 api
-            axios.post("http://127.0.0.1:8000/review/write/", {
-                //uid : sessionStorage.getItem('uid'),
-                bid : sessionStorage.getItem('id'),     // bid 가 null 이라고 뜸..
-                text,
-                rtitle,
-                img : data.thumbnail,
-                info : data.contents,
-                btitle,
-                author,
->>>>>>> f79e6af366e2c6cc29ab5cb1420f2720f2d3662a
             }).then(function(response) {
                 console.log(response)
                 alert(response.data.message)
