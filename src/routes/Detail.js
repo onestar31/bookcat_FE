@@ -7,6 +7,8 @@ import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
 import { withRouter, useParams } from 'react-router-dom'
+import { reviewdataAtom } from 'Atom'
+import { useRecoilValue } from 'recoil'
 
 //서평 공간 구현
 const Loader = styled.div`
@@ -105,40 +107,25 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
 const Detail = ({history}) => {
-    const [data, setData] = useState([])
     const [bookdata, setBookdata] = useState([])
     const [loading, setLoading] = useState(true)
-    const {bookid} = useParams() //url의 /:id 부분
-    const userid = sessionStorage.getItem('email')
+    const reviewdata = useRecoilValue(reviewdataAtom) 
 
-    //bid를 이용한 api로(?) 서평 정보 가져오기(이 때 userid를 같이 보내줘야하는지)
-    useEffect(()=>{
-        axios.get(`http://127:0.0.1:8000/review/${userid}/${bookid}`)  //api 임시로 설정해둔 것
-        .then((response) => {
-            setData(response.data)
-            console.log(response.data)
-            setLoading(true)
-        }).catch((error)=>{
-            console.log(error)
-        })
-    },[])
-    
     //bid로 책 정보 가져오기
     async function booksdata(data) {
         const params = {
             target: 'isbn',
-            query: data.bid,
+            query: data,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents);
     setBookdata(documents[0])
-    setLoading(true) //연동 이후 false 
 } 
 
 useEffect(() => {
-    if (data!=='')
-    booksdata(data)
-},[data])
+    booksdata(reviewdata[0].bookId)
+    setLoading(false) //loading 이 너무 빨리 이루어진다 싶으면 async await 걸기
+},[])
 
 const moveEdit = () => {
     history.push('/edit')
@@ -152,16 +139,16 @@ const moveEdit = () => {
         {loading ? <Loader>Loading...</Loader> : 
     <Body>
         <Reviewform>
-            <ReviewTitle>{data.reviewTitle}</ReviewTitle>
+            <ReviewTitle>{reviewdata[0].reviewTitle}</ReviewTitle>
             <Bookinfo>
-                <Bookimg src={bookdata.thumbnail}></Bookimg>
+                <Bookimg src={bookdata?.thumbnail}></Bookimg>
                 <Bookcontainer>
-                <Booktitle>{bookdata.title}</Booktitle>
-                <Bookauthors>{bookdata.authors}</Bookauthors>
-                <Bookcontents>{bookdata.contents}...</Bookcontents>
+                <Booktitle>{bookdata?.title}</Booktitle>
+                <Bookauthors>{bookdata?.authors}</Bookauthors>
+                <Bookcontents>{bookdata?.contents}...</Bookcontents>
                 </Bookcontainer>
             </Bookinfo>
-            <Reviewtext>{data.reviewTxt}</Reviewtext>
+            <Reviewtext>{reviewdata[0].reviewTxt}</Reviewtext>
         </Reviewform>
         <Btn>
        <Edit onClick={moveEdit}>수정</Edit>

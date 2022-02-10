@@ -7,6 +7,9 @@ import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
+import { reviewdataAtom } from 'Atom'
+import { useSetRecoilState, useRecoilState } from "recoil"
+
 
 //서평 공간 구현
 
@@ -84,6 +87,8 @@ const Storage = ({history}) => {
     const [datas, setData] = useState([]) 
     const [bookdata, setBookdata] = useState([])
     const [noData, setNoData] = useState(true) 
+    const [reviewdata, setreviewdata] = useRecoilState(reviewdataAtom)
+
 
     //장고로 부터 데이터 가져오는 api
     useEffect(()=>{
@@ -119,6 +124,7 @@ const Storage = ({history}) => {
     //book id를 이용해 상세페이지로 이동 
     const moveDetail = (data) => {
         console.log(data)
+        setreviewdata(() => [{'bookId': data.bookId, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
         history.push(`/detail/${data.bookId}`)
     }
    
