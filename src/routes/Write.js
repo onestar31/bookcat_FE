@@ -83,7 +83,7 @@ const Write = ({history}) => {
 
     const [datas, setDatas] = useState('')
     const [writeData, setWriteData] = useState('')
-    const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
+    const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용 //new 주석
 
     //datas 상태가 변할 때 시행되는 장고로 데이터 post 하는 코드
         useEffect(()=> {
