@@ -88,11 +88,12 @@ const Write = ({history}) => {
         useEffect(()=> {
             if (datas !== '') {
             axios.post("http://127.0.0.1:8000/review/", {
+                uid : sessionStorage.getItem('email'),
                 bid : datas.isbn,
                 rtitle : writeData.rtitle,
                 date : day,
                 rtext: writeData.rtext,
-                uid : sessionStorage.getItem('email'),
+                /* rate :  미완입니다*/ 
                 //rid //review id 대신에 bid로 할 수 있을까 
             }).then(function(response) {
                 console.log(response)
