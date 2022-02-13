@@ -87,6 +87,9 @@ const Write = ({history}) => {
 
     const booktitle = (history.location.pathname === '/write') ? '' : bookdata[0].bookTitle //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
     const bookauthor = (history.location.pathname === '/write') ? '' : bookdata[0].bookAuthors //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
+    const bookisbn = (history.location.pathname === '/write') ? '' : bookdata[0].isbn //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
+
+    //const rtitle = writedata.writeTitle
 
     const [change, setChange] = useState(false)
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용 //new 주석
@@ -95,13 +98,13 @@ const Write = ({history}) => {
         useEffect(()=> {
             if (change){
             axios.post("http://127.0.0.1:8000/review/", {
-                uid : sessionStorage.getItem('uid'), 
-                bid : bookdata.isbn,
+                uid : sessionStorage.getItem('uid'),
+                bid : bookisbn,
                 rtitle : writedata.writeTitle,
-                date : day,
+                //date : day,
                 rtext: writedata.writeTxt,
                 /* rate :  미완입니다*/ 
-                //rid //review id 대신에 bid로 할 수 있을까 
+                //rid //review id 대신에 bid로 할 수 있을까 -> write 하면 자동으로 rid 생성되기 때문에 여기서는 고려할 필요 X
             }).then(function(response) {
                 console.log(response)
                 alert(response.data.message)
