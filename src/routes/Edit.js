@@ -93,14 +93,14 @@ const Edit = ({history}) => {
 
     useEffect(()=>{
         if (change){
-        axios.post("http://127.0.0.1:8000/edit/", { //url edit으로 바꿔줘야 할 것
+        axios.post("http://127.0.0.1:8000/review/edit/", {
         uid : sessionStorage.getItem('uid'),
         bid : bookdata.isbn, 
         rtitle : writedata[0].writeTitle,
         date : reviewvalue[0].reviewDate, //날짜는 예전 꺼 그대로
         rtext: writedata[0].writeTxt,
         /* rate :  미완입니다*/ 
-        //rid //review id 대신에 bid로 할 수 있을까 
+        //rid //review id 대신에 bid로 할 수 있을까 -> 장고 DB에서 rid를 PK로 하기 때문에 rid 사용해야 함
     }).then(function(response) {
         console.log(response)
         alert(response.data.message)
