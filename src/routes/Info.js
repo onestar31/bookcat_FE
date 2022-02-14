@@ -83,12 +83,12 @@ display: flex;
 flex-direction: column;`
 
 const Pswtit = styled.div`
-padding-left: 3rem;
+padding-left: 6rem;
 margin-bottom: 1rem;
 font-size: 17px;`
 
 const Pswbox = styled.div`
-margin-left: 3rem;
+padding-left: 6rem;
 `
 
 const Boxone = styled.input`

@@ -123,8 +123,8 @@ const Storage = ({history}) => {
     //book id를 이용해 상세페이지로 이동 
     const moveDetail = (data) => {
         console.log(data)
-        setreviewdata(() => [{'bookId': data.bookId, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
-        history.push(`/detail/${data.bookId}`)
+        setreviewdata(() => [{'bookId': data.bookId, 'reviewId': data.id, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
+        history.push(`/detail/${data.bookId}`)        //reviewId 추가
     }
    
     return(

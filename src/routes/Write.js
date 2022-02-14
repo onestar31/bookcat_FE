@@ -80,6 +80,12 @@ outline: none;
 font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
+const Ratebox = styled.input`
+margin-top: 0.5rem;`
+
+const Rate = styled(Inputbox)`
+text-align: start;`
+
 const Write = ({history}) => {
     
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
@@ -87,11 +93,11 @@ const Write = ({history}) => {
 
     const booktitle = (history.location.pathname === '/write') ? '' : bookdata[0].bookTitle //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
     const bookauthor = (history.location.pathname === '/write') ? '' : bookdata[0].bookAuthors //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
-    const bookisbn = (history.location.pathname === '/write') ? '' : bookdata[0].isbn //삼항 연산자 사용하여 홈페이지에 따른 정보 뷰 상태 변환
 
     //const rtitle = writedata.writeTitle
 
     const [change, setChange] = useState(false)
+    const [rate, setRate] = useState(0)
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용 //new 주석
 
     //writeSubmit가 구동된 후 change 상태가 변화할 때 시행되는 장고로 데이터 post 하는 코드
@@ -99,12 +105,11 @@ const Write = ({history}) => {
             if (change){
             axios.post("http://127.0.0.1:8000/review/", {
                 uid : sessionStorage.getItem('uid'),
-                bid : bookisbn,
-                rtitle : writedata.writeTitle,
-                //date : day,
-                rtext: writedata.writeTxt,
-                /* rate :  미완입니다*/ 
-                //rid //review id 대신에 bid로 할 수 있을까 -> write 하면 자동으로 rid 생성되기 때문에 여기서는 고려할 필요 X
+                bid : bookdata[0].isbn,
+                rtitle : writedata[0].writeTitle,
+                date : day, //주석
+                rtext: writedata[0].writeTxt,
+                rate: +rate
             }).then(function(response) {
                 console.log(response)
                 alert(response.data.message)
@@ -113,7 +118,6 @@ const Write = ({history}) => {
                 alert('문제가 발생했습니다.')
             }).finally(() => {
                history.push('/review')
-               console.log(bookdata)
             })}
         },[change])
 
@@ -133,6 +137,14 @@ const Write = ({history}) => {
     const date = today.getDate()
     const rid = today.getTime()
     const day = year+'.'+month+'.'+(date+1)+'.'
+
+   /*  //rate ★
+    let star = ''
+    let starlist = []
+    for (let i=0; i<5; i++){
+        star += '★'
+        starlist.push(star)
+    } */
      
     return(
         <>
@@ -145,6 +157,13 @@ const Write = ({history}) => {
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})}></Inputbox>
             <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={booktitle}></Inputbox>
             <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={bookauthor}></Inputbox>
+            <Rate as="div">
+            <Ratebox  type="radio" name="rate" value="1" onClick={(e)=> setRate(e.target.value)} />★
+            <Ratebox  type="radio" name="rate" value="2" onClick={(e)=> setRate(e.target.value)}/>★★
+            <Ratebox  type="radio" name="rate" value="3" onClick={(e)=> setRate(e.target.value)}/>★★★
+            <Ratebox  type="radio" name="rate" value="4" onClick={(e)=> setRate(e.target.value)}/>★★★★
+            <Ratebox  type="radio" name="rate" value="5" onClick={(e)=> setRate(e.target.value)}/>★★★★★
+            </Rate>
             <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>등록</Subm>
         </Writeform>

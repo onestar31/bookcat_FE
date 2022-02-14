@@ -115,8 +115,8 @@ const Review = ({history}) => {
 } 
 
     useEffect(() => {
-       /* booksdata(bookvalue[0].bookTitle, bookvalue[0].bookAuthors)
-        */setLoading(false)
+       booksdata(bookvalue[0].bookTitle, bookvalue[0].bookAuthors)
+        setLoading(false)
     },[])
 
     //서평 공간으로 이동
@@ -132,7 +132,7 @@ const Review = ({history}) => {
         {loading ? <Loader>Loading...</Loader> : 
     <Body>
         <Reviewform>
-            {/* <ReviewTitle>{writevalue[0].writeTitle}</ReviewTitle>
+            <ReviewTitle>{writevalue[0].writeTitle}</ReviewTitle>
             <Bookinfo>
                 <Bookimg src={data.thumbnail}></Bookimg>
                 <Bookcontainer>
@@ -141,7 +141,7 @@ const Review = ({history}) => {
                 <Bookcontents>{data.contents}...</Bookcontents>
                 </Bookcontainer>
             </Bookinfo>
-            <Reviewtext>{writevalue[0].writeTxt}</Reviewtext> */}
+            <Reviewtext>{writevalue[0].writeTxt}</Reviewtext>
         </Reviewform>        
         <Btn>
        <List onClick={moveStorage}>목록</List>

@@ -115,7 +115,7 @@ const Login = ({history}) => {
             sessionStorage.setItem('email', response.data.userEmail)
             sessionStorage.setItem('uid', response.data.uid) //비밀번호 바꾸기 위한 axios put 요청을 해당 id 주소로 보낼 때 필요
 
-           window.location.replace('/')
+           history.push('/')
         }).catch(function(error){
             console.log(error.response)
             alert(error.response.data.message)

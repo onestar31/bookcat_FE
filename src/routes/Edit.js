@@ -79,12 +79,19 @@ outline: none;
 font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
+const Ratebox = styled.input`
+margin-top: 0.5rem;`
+
+const Rate = styled(Inputbox)`
+text-align: start;`
+
 const Edit = ({history}) => {
-    const [bookdata, setBookData] = useState('')
+    const [datas, setDatas] = useState('')
+    const [rate, setRate] = useState(0)
     const [change, setChange] = useState(false)
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
     const reviewvalue = useRecoilValue(reviewdataAtom) 
-    const bookvalue = useRecoilValue(bookdataAtom)
+    const [bookdata, setBookData] = useRecoilState(bookdataAtom)
     const [writedata, setWriteData] = useRecoilState(writedataAtom)
 
     useEffect(()=>{
@@ -95,12 +102,10 @@ const Edit = ({history}) => {
         if (change){
         axios.post("http://127.0.0.1:8000/review/edit/", {
         uid : sessionStorage.getItem('uid'),
-        bid : bookdata.isbn, 
+        bid : datas.isbn, 
         rtitle : writedata[0].writeTitle,
-        date : reviewvalue[0].reviewDate, //날짜는 예전 꺼 그대로
         rtext: writedata[0].writeTxt,
-        /* rate :  미완입니다*/ 
-        //rid //review id 대신에 bid로 할 수 있을까 -> 장고 DB에서 rid를 PK로 하기 때문에 rid 사용해야 함
+        rate : +rate 
     }).then(function(response) {
         console.log(response)
         alert(response.data.message)
@@ -127,7 +132,7 @@ const Edit = ({history}) => {
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents); 
-    setBookData(documents[0])
+    setDatas(documents[0])
     } 
      
     return(
@@ -139,8 +144,15 @@ const Edit = ({history}) => {
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
-            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={bookdata?.title}></Inputbox>
-            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={bookdata?.authors}></Inputbox>
+            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={datas?.title}></Inputbox>
+            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={datas?.authors}></Inputbox>
+            <Rate as="div">
+            <Ratebox  type="radio" name="rate" value="1" onClick={(e)=> setRate(e.target.value)} />★
+            <Ratebox  type="radio" name="rate" value="2" onClick={(e)=> setRate(e.target.value)}/>★★
+            <Ratebox  type="radio" name="rate" value="3" onClick={(e)=> setRate(e.target.value)}/>★★★
+            <Ratebox  type="radio" name="rate" value="4" onClick={(e)=> setRate(e.target.value)}/>★★★★
+            <Ratebox  type="radio" name="rate" value="5" onClick={(e)=> setRate(e.target.value)}/>★★★★★
+            </Rate>
             <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewvalue[0].reviewTxt}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>수정</Subm>
         </Writeform>
