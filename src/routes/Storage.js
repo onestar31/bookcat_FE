@@ -102,27 +102,20 @@ const Storage = ({history}) => {
         })
     },[])
 
-    //isbn으로 책 img 가져오기
-    /* function booksdata(word) {
+ /*    //isbn으로 책 img 가져오기
+    async function booksdata(isbn10, isbn13) {
         const params = {
             target: 'isbn',
-            query: word.bookId,
+            query: isbn10 || isbn13,
             size: 1,
     };
-    const {data: {documents}} = ResultApi(params); console.log(documents); 
+    const {data: {documents}} = await ResultApi(params); console.log(documents); 
     setBookdata(documents[0])
-    }  
-
-    useEffect(()=>{
-        if(datas!==''){
-            booksdata(datas)
-        }
-    }, [datas])*/
-     
+    }  */
 
     //book id를 이용해 상세페이지로 이동 
     const moveDetail = (data) => {
-        console.log(data)
+        console.log(data)       //변수 이름 맞는지 확인하기
         setreviewdata(() => [{'bookId': data.bookId, 'reviewId': data.id, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
         history.push(`/detail/${data.bookId}`)        //reviewId 추가
     }
@@ -137,7 +130,7 @@ const Storage = ({history}) => {
         {noData ? <Noform>작성한 서평이 없습니다</Noform> : 
         <ul>
         {datas && datas.map((data)=> <Storeform key={data.id} onClick={() => moveDetail(data)}>
-                <Bookimg src={bookdata.thumbnail}></Bookimg>  
+                <Bookimg src={''}></Bookimg>
                 <Bookcontainer>
                 <Writetitle>{data.reviewTitle}</Writetitle>   {/*// 모델 수정 必 */}
                 <Booktitle>{data.bookId}</Booktitle>    

@@ -94,15 +94,24 @@ const Edit = ({history}) => {
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
     const [writedata, setWriteData] = useRecoilState(writedataAtom)
 
+    const reviewbid = reviewvalue[0].bookId
+
     useEffect(()=>{
-        booksdata(reviewvalue[0].isbn)
+        if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
+        const isbn10 = reviewbid.slice(0,10)
+        const isbn13 = reviewbid.slice(11)
+        booksdata(isbn10, isbn13)
+    } else {
+        booksdata(reviewbid)
+    }
     },[])
 
     useEffect(()=>{
         if (change){
-        axios.post("http://127.0.0.1:8000/review/edit/", {
+        axios.post("http://127.0.0.1:8000/review/edit/", { //post 보내는 url 확인
         uid : sessionStorage.getItem('uid'),
-        bid : datas.isbn, 
+        bid : datas.isbn, // bid string 으로 받는 거 확인
+        rid : reviewvalue[0].reviewId,  //reviewId 추가
         rtitle : writedata[0].writeTitle,
         rtext: writedata[0].writeTxt,
         rate : +rate 
@@ -125,10 +134,10 @@ const Edit = ({history}) => {
         }
 
     //서평 책 정보 카카오 api로 불러오기 함수
-    async function booksdata(word) {
+    async function booksdata(isbn10, isbn13) {
         const params = {
             target: 'isbn',
-            query: word,
+            query: isbn10 || isbn13,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents); 

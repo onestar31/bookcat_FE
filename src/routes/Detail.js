@@ -110,20 +110,28 @@ const Detail = ({history}) => {
     const [bookdata, setBookdata] = useState([])
     const [loading, setLoading] = useState(true)
     const reviewdata = useRecoilValue(reviewdataAtom) 
+    const reviewbid = reviewdata[0].bookId
+
 
     //bid로 책 정보 가져오기
-    async function booksdata(data) {
+    async function booksdata(isbn10, isbn13) {
         const params = {
             target: 'isbn',
-            query: data,
+            query: isbn10 || isbn13,
             size: 1,
     };
-    const {data: {documents}} = await ResultApi(params); console.log(documents);
+    const {data: {documents}} = await ResultApi(params); console.log(documents); 
     setBookdata(documents[0])
-} 
+    } 
 
 useEffect(() => {
-    booksdata(reviewdata[0].bookId)
+    if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
+        const isbn10 = reviewbid.slice(0,10)
+        const isbn13 = reviewbid.slice(11)
+        booksdata(isbn10, isbn13)
+    } else {
+        booksdata(reviewbid)
+    }
     setLoading(false) //loading 이 너무 빨리 이루어진다 싶으면 async await 걸기
 },[])
 
