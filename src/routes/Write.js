@@ -101,25 +101,25 @@ const Write = ({history}) => {
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용 //new 주석
 
     //writeSubmit가 구동된 후 change 상태가 변화할 때 시행되는 장고로 데이터 post 하는 코드
-        useEffect(()=> {
-            if (change){
-            axios.post("http://127.0.0.1:8000/review/", {
-                uid : sessionStorage.getItem('uid'),
-                bid : bookdata[0].isbn,
-                rtitle : writedata[0].writeTitle,
-                date : day, //주석
-                rtext: writedata[0].writeTxt,
-                rate: +rate
-            }).then(function(response) {
-                console.log(response)
-                alert(response.data.message)
-            }).catch(function(error) {
-                console.log(error)
-                alert('문제가 발생했습니다.')
-            }).finally(() => {
-               history.push('/review')
-            })}
-        },[change])
+    useEffect(()=> {
+        if (change){
+        axios.post("http://127.0.0.1:8000/review/", {
+            uid : sessionStorage.getItem('uid'),
+            bid : bookdata[0].isbn,
+            rtitle : writedata[0].writeTitle,
+            date : day, //주석
+            rtext: writedata[0].writeTxt,
+            rate: +rate
+        }).then(function(response) {
+            console.log(response)
+            alert(response.data.message)
+        }).catch(function(error) {
+            console.log(error)
+            alert('문제가 발생했습니다.')
+        }).finally(() => {
+           history.push('/review')
+        })}
+    },[change])
 
     //onSubmit를 한 경우 시행되는 코드 
     const writeSubmit = async (data) => {

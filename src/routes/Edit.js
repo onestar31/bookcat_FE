@@ -108,7 +108,7 @@ const Edit = ({history}) => {
 
     useEffect(()=>{
         if (change){
-        axios.post("http://127.0.0.1:8000/review/edit/", { //post 보내는 url 확인
+        axios.put("http://127.0.0.1:8000/review/edit/", { //put 보내는 url 확인
         uid : sessionStorage.getItem('uid'),
         bid : datas.isbn, // bid string 으로 받는 거 확인
         rid : reviewvalue[0].reviewId,  //reviewId 추가
@@ -126,12 +126,12 @@ const Edit = ({history}) => {
     })}
     }, [change])
 
-        //onSubmit를 한 경우 시행되는 코드 
+    //onSubmit를 한 경우 시행되는 코드 
     const writeSubmit = (data) => {
         setWriteData(()=> [{'writeTitle': data.rtitle, 'writeTxt': data.rtext}])
         setBookData(()=> [{'bookTitle': data.btitle, 'bookAuthors': data.bauthor}])
         setChange(true)
-        }
+    }
 
     //서평 책 정보 카카오 api로 불러오기 함수
     async function booksdata(isbn10, isbn13) {
