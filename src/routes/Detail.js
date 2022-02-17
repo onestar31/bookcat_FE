@@ -124,36 +124,36 @@ const Detail = ({history}) => {
     setBookdata(documents[0])
     } 
 
-useEffect(() => {
-    if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
-        const isbn10 = reviewbid.slice(0,10)
-        const isbn13 = reviewbid.slice(11)
-        booksdata(isbn10, isbn13)
-    } else {
-        booksdata(reviewbid)
+    useEffect(() => {
+        if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
+            const isbn10 = reviewbid.slice(0,10)
+            const isbn13 = reviewbid.slice(11)
+            booksdata(isbn10, isbn13)
+        } else {
+            booksdata(reviewbid)
+        }
+        setLoading(false) //loading 이 너무 빨리 이루어진다 싶으면 async await 걸기
+    },[])
+    
+    const moveEdit = () => {
+        history.push('/edit')
     }
-    setLoading(false) //loading 이 너무 빨리 이루어진다 싶으면 async await 걸기
-},[])
 
-const moveEdit = () => {
-    history.push('/edit')
-}
-
-//삭제 버튼 누르면 삭제 
-const goDelete = () => {
-    console.log(reviewdata)
-    axios.delete('http://127.0.0.1:8000/review/delete/', {data : {
+    //삭제 버튼 누르면 삭제 
+    const goDelete = () => {
+        console.log(reviewdata)
+        axios.delete('http://127.0.0.1:8000/review/delete/', {data : {
         reviewId : reviewdata[0].reviewId
     }})
-  .then(function (response) {
-    alert(response.data.message)
-    console.log(response);
-  })
-  .catch(function (error) {
-    alert(error.response.data.message)
-    console.log(error);
-  })
-}
+    .then(function (response) {
+        alert(response.data.message)
+        console.log(response);
+    })
+    .catch(function (error) {
+        alert(error.response.data.message)
+        console.log(error);
+    })
+    }
 
     return(
         <>
@@ -181,6 +181,6 @@ const goDelete = () => {
     </Body>
     }
     </>
-    )}
+)}
 
 export default withRouter(Detail)
