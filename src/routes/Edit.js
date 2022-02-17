@@ -154,7 +154,7 @@ const Edit = ({history}) => {
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
             <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={datas?.title}></Inputbox>
-            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={datas?.authors}></Inputbox>
+            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={datas?.authors}></Inputbox> {/* //세번 눌러야하는 문제  */}
             <Rate as="div">
             <Ratebox  type="radio" name="rate" value="1" onClick={(e)=> setRate(e.target.value)} />★
             <Ratebox  type="radio" name="rate" value="2" onClick={(e)=> setRate(e.target.value)}/>★★

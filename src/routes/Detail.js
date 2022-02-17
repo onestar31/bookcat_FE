@@ -139,6 +139,22 @@ const moveEdit = () => {
     history.push('/edit')
 }
 
+//삭제 버튼 누르면 삭제 
+const goDelete = () => {
+    console.log(reviewdata)
+    axios.delete('http://127.0.0.1:8000/review/delete/', {data : {
+        reviewId : reviewdata[0].reviewId
+    }})
+  .then(function (response) {
+    alert(response.data.message)
+    console.log(response);
+  })
+  .catch(function (error) {
+    alert(error.response.data.message)
+    console.log(error);
+  })
+}
+
     return(
         <>
         <Nickname />
@@ -160,7 +176,7 @@ const moveEdit = () => {
         </Reviewform>
         <Btn>
        <Edit onClick={moveEdit}>수정</Edit>
-        <Delete>삭제</Delete>
+        <Delete onClick={goDelete}>삭제</Delete>
         </Btn>
     </Body>
     }

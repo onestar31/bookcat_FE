@@ -89,7 +89,6 @@ const Storage = ({history}) => {
     const [noData, setNoData] = useState(true) 
     const setreviewdata = useSetRecoilState(reviewdataAtom)
 
-
     //장고로 부터 데이터 가져오는 api
     useEffect(()=>{
         axios.get('http://127.0.0.1:8000/review/')
@@ -102,16 +101,20 @@ const Storage = ({history}) => {
         })
     },[])
 
- /*    //isbn으로 책 img 가져오기
-    async function booksdata(isbn10, isbn13) {
+   /*  useEffect(()=>{
+        datas.map((data)=> data.bookId.indexOf(' ') !== -1 ? booksdata(data.bookId.slice(11)) : booksdata(data.bookId.slice(11)))
+    }, [])
+
+     //isbn으로 책 img 가져오기
+    async function booksdata(isbn) {
         const params = {
             target: 'isbn',
-            query: isbn10 || isbn13,
+            query: isbn,
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents); 
-    setBookdata(documents[0])
-    }  */
+    setBookdata((olddatas) => [...olddatas, documents[0].thumbnail])
+    }   */
 
     //book id를 이용해 상세페이지로 이동 
     const moveDetail = (data) => {
@@ -130,7 +133,7 @@ const Storage = ({history}) => {
         {noData ? <Noform>작성한 서평이 없습니다</Noform> : 
         <ul>
         {datas && datas.map((data)=> <Storeform key={data.id} onClick={() => moveDetail(data)}>
-                <Bookimg src={''}></Bookimg>
+                <Bookimg src={data}></Bookimg>
                 <Bookcontainer>
                 <Writetitle>{data.reviewTitle}</Writetitle>   {/*// 모델 수정 必 */}
                 <Booktitle>{data.bookId}</Booktitle>    
