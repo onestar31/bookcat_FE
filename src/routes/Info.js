@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Nickname from 'components/Nickname'
 import axios from 'axios'
 import { useState } from 'react/cjs/react.development'
+import { useForm } from 'react-hook-form'
 
 
 //내 정보 구현
@@ -76,7 +77,7 @@ margin-top: 1vh;
 `
 const Usernick = styled(Useremail)``
 
-const Pswform = styled.form`
+const Pswform = styled.div`
 text-align: start;
 margin-top: 3.5rem;
 display: flex;
@@ -117,75 +118,60 @@ font-size: 15px;
 `
 
 const Info = () => {
-    const [newPw, setnewPw] = useState()
-    const [checkPw, setCheckPw] = useState()
-    const [curPw, setCurPw] = useState()
+    const { register, handleSubmit, setError, setValue } = useForm()
 
     const email = sessionStorage.getItem('email')
     const nickname = sessionStorage.getItem('nickname')
     const id = sessionStorage.getItem('id')
-    const pw = sessionStorage.getItem('pw')
 
-    const onChange = (e) => {
-        const {target: {value, name}} = e
-        if (name === 'curpw'){
-            setCurPw(value)
-        } else if (name === 'newpw') {
-            setnewPw(value)
-        } else {
-            setCheckPw(value)
+    const changePw = (data) => {
+        if (data.newpw === data.checkpw) {
+            axios.patch(`http://localhost:8000/changePw/`, {
+                newPw: data.newpw,
+                userEmail: email,
+                userPw: data.userPw,
+            })
+                .then(function (response) {
+                    console.log(response.data.message);
+                })
+                .catch(function (error) {
+                    console.log(error.response.data.message);
+                });
         }
     }
 
-    const changePw = (e) => {
-        e.preventDefault()
-        if (pw === curPw && newPw === checkPw) {
-            axios.put(`http://localhost:8000/user/info/${id}`, {
-            userPw: newPw,
-          })
-          .then(function (response) {
-            console.log(response.message);
-          })
-          .catch(function (error) {
-            console.log(error.message);
-          });
-        } else {
-            alert('비밀번호를 확인해주세요')
-        }
-        
-    }
-
-    return(
+    return (
         <>
-        <Nickname />
-        <Top />
-        <Navigation />
-    <Body>
-        <Title>나의 정보</Title>
-        <Infoform>
-            <NickEml>
-                <Nick>
-                    <Nicktit>닉네임</Nicktit>
-                    <Usernick>{nickname}</Usernick>
-                </Nick>
-                <Email>
-                    <Emailtit>이메일</Emailtit>
-                    <Useremail>{email}</Useremail>
-                </Email>
-            </NickEml>
-            <Pswform>
-                <Pswtit>비밀번호 변경</Pswtit>
-                <Pswbox onSubmit={changePw}>
-                    <Boxone type='password' name='curpw' placeholder='현재 비밀번호' value={curPw} onChange={onChange}></Boxone>
-                    <Boxone type='password' name='newpw' placeholder='새 비밀번호' value={newPw} onChange={onChange}></Boxone>
-                    <Boxone type='password' name='checkpw' placeholder='새 비밀번호 확인' value={checkPw} onChange={onChange}></Boxone>
-                <Pswedit>비밀번호 변경</Pswedit>
-                </Pswbox>
-            </Pswform>
-            
-        </Infoform>
-    </Body>
-    </>
-    )}
+            <Nickname />
+            <Top />
+            <Navigation />
+            <Body>
+                <Title>나의 정보</Title>
+                <Infoform onSubmit={handleSubmit(changePw)}>
+                    <NickEml>
+                        <Nick>
+                            <Nicktit>닉네임</Nicktit>
+                            <Usernick>{nickname}</Usernick>
+                        </Nick>
+                        <Email>
+                            <Emailtit>이메일</Emailtit>
+                            <Useremail>{email}</Useremail>
+                        </Email>
+                    </NickEml>
+                    <Pswform>
+                        <Pswtit>비밀번호 변경</Pswtit>
+                        <Pswbox>
+                            <Boxone type='password' placeholder='현재 비밀번호' {...register('curpw')}></Boxone>
+                            <Boxone type='password' placeholder='새 비밀번호' {...register('newpw')}></Boxone>
+                            <Boxone type='password' placeholder='새 비밀번호 확인' {...register('checkpw')}></Boxone>
+                            <Pswedit onClick={handleSubmit(changePw)}>비밀번호 변경</Pswedit>
+                        </Pswbox>
+                    </Pswform>
+
+                </Infoform>
+            </Body>
+        </>
+    )
+}
 
 export default Info

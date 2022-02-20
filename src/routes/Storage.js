@@ -9,6 +9,8 @@ import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
 import { reviewdataAtom } from 'components/Atom'
 import { useSetRecoilState, useRecoilState } from "recoil"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpaghettiMonsterFlying, faStar } from "@fortawesome/free-solid-svg-icons";
 
 
 //서평 공간 구현
@@ -36,6 +38,7 @@ font-size: 20px;
 margin: 20vh 0;`
 
 const Storeform = styled.li`    
+position: relative;
 font-family: 'YanoljaYacheR';
 display: flex;
 align-items: center;
@@ -47,9 +50,11 @@ margin-left: 50%;
 transform: translateX(-50%);
 background: #F3CACA;
 `
-const Bookimg = styled.img`
+const Bookimg = styled.div`
 height: 100%;
 width: 9.2rem;
+background-image: ${props => props.bground ? `url(${props.bground})` : `url(${process.env.PUBLIC_URL}/nobookimg.jpg)`};
+background-size : cover;
 `
 const Bookcontainer = styled.div`
 display: flex;
@@ -58,7 +63,8 @@ width: 37rem;
 margin-left: 14px;
 margin-right: 14px;
 height: 11.9rem;
-text-align: start;`
+text-align: start;
+`
 
 const Writetitle = styled.div`
 font-weight: 600;
@@ -82,11 +88,32 @@ const Date = styled.div`
 text-align: end;
 margin-bottom: 0.3rem;
 `
+const Rate = styled.div`
+position: absolute;
+top : 1.4rem;
+right: 1.4rem;
+display: flex;
+`
+
+const Star1 = styled.div`
+position: relative;
+color: ${(props) => props.rate>4 ? '#A17E00' : 'transparent'};`
+
+const Star2 = styled(Star1)`
+color: ${(props) => props.rate>3 ? '#A17E00' : 'transparent'};`
+const Star3 = styled(Star1)`
+color: ${(props) => props.rate>2 ? '#A17E00' : 'transparent'};`
+const Star4 = styled(Star1)`
+color: ${(props) => props.rate>1 ? '#A17E00' : 'transparent'};`
+const Star5 = styled(Star1)`
+color: ${(props) => props.rate>0 ? '#A17E00' : 'transparent'};`
 
 const Storage = ({history}) => {
     const [datas, setDatas] = useState([]) 
-    const [bookdata, setBookdata] = useState([])
+    const [thumbnail, setThumbnail] = useState([])
+    const [title, setTitle] = useState([])
     const [noData, setNoData] = useState(true) 
+    const [imges, setImges] = useState(false)
     const setreviewdata = useSetRecoilState(reviewdataAtom)
 
     //장고로 부터 데이터 가져오는 api
@@ -94,27 +121,33 @@ const Storage = ({history}) => {
         axios.get('http://127.0.0.1:8000/review/')
         .then((response) => {
             setDatas(response.data)
-            setNoData(false)
             console.log((response.data))
+            setNoData(false)
         }).catch((error)=>{
             console.log(error)
         })
     },[])
 
-   /*  useEffect(()=>{
-        datas.map((data)=> data.bookId.indexOf(' ') !== -1 ? booksdata(data.bookId.slice(11)) : booksdata(data.bookId.slice(11)))
-    }, [])
+    useEffect (async() => {
+        if (datas !== []){
+        for (let i=0; i<datas.length-60; i++){
+            await booksdata(datas[i].bookId)
+        }
+    }
+    }, [datas])
 
      //isbn으로 책 img 가져오기
     async function booksdata(isbn) {
+        isbn.indexOf(' ') !== -1 ? isbn = isbn.slice(11) : isbn = isbn
         const params = {
             target: 'isbn',
             query: isbn,
             size: 1,
     };
-    const {data: {documents}} = await ResultApi(params); console.log(documents); 
-    setBookdata((olddatas) => [...olddatas, documents[0].thumbnail])
-    }   */
+    const {data: {documents}} = await ResultApi(params);
+    setThumbnail((olddata) => [...olddata, documents[0].thumbnail])
+    setTitle((olddata) => [...olddata, documents[0].title])
+    }
 
     //book id를 이용해 상세페이지로 이동 
     const moveDetail = (data) => {
@@ -132,11 +165,18 @@ const Storage = ({history}) => {
         <Title>서평 공간</Title>
         {noData ? <Noform>작성한 서평이 없습니다</Noform> : 
         <ul>
-        {datas && datas.map((data)=> <Storeform key={data.id} onClick={() => moveDetail(data)}>
-                <Bookimg src={data}></Bookimg>
+        {datas && datas.map((data, idx)=> <Storeform key={data.id} onClick={() => moveDetail(data)}>
+                <Bookimg bground={thumbnail[idx]}></Bookimg>
+                <Rate>
+                <Star1 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star1>
+                <Star2 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star2>
+                <Star3 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star3>
+                <Star4 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star4>
+                <Star5 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star5>
+                </Rate>
                 <Bookcontainer>
                 <Writetitle>{data.reviewTitle}</Writetitle>   {/*// 모델 수정 必 */}
-                <Booktitle>{data.bookId}</Booktitle>    
+                <Booktitle>{title[idx]}</Booktitle>    
                 <Writecontent>{data.reviewTxt}...</Writecontent>
                {/* rid 받아서 리뷰 구분할 필요 없을까?*/}
                <Date>{data.reviewDate}</Date>

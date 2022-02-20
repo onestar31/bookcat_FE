@@ -15,9 +15,8 @@ position: relative;
 font-family: 'YanoljaYacheR';
 `
 
-const Bodypic = styled.div`
+const Bodypic = styled.img`
 position: absolute;
-background-image: url(${process.env.PUBLIC_URL+'mainbookself.jpeg'});
 width: 68vw;
 height: 74vh;
 opacity: 55%;
@@ -76,11 +75,11 @@ const Home = ({history}) => {
     
     return(
         <>
-    <   Nickname />
+        <Nickname />
         <Top />
         <Navigation />
     <Body>
-    <Bodypic></Bodypic>
+    <Bodypic src={`${process.env.PUBLIC_URL}/mainbookself.jpeg`}></Bodypic>
     <Keyform>
         <Keytit>키워드를 입력하세요</Keytit>
         <Keyexp>고양이와 책을에서 키워드에 맞는 책을 읽고<br/> 나만의 서평을 작성해보세요</Keyexp>

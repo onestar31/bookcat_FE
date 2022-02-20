@@ -141,6 +141,7 @@ const Edit = ({history}) => {
             size: 1,
     };
     const {data: {documents}} = await ResultApi(params); console.log(documents); 
+    setBookData(()=> [{'bookTitle': documents[0].title, 'bookAuthors': documents[0].authors}])
     setDatas(documents[0])
     } 
      
@@ -153,14 +154,14 @@ const Edit = ({history}) => {
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
-            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={datas?.title}></Inputbox>
-            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={datas?.authors}></Inputbox> {/* //세번 눌러야하는 문제  */}
+            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={ 'hello' }></Inputbox>
+            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={ 'hello' }></Inputbox> {/* //세번 눌러야하는 문제  */}
             <Rate as="div">
-            <Ratebox  type="radio" name="rate" value="1" onClick={(e)=> setRate(e.target.value)} />★
-            <Ratebox  type="radio" name="rate" value="2" onClick={(e)=> setRate(e.target.value)}/>★★
-            <Ratebox  type="radio" name="rate" value="3" onClick={(e)=> setRate(e.target.value)}/>★★★
-            <Ratebox  type="radio" name="rate" value="4" onClick={(e)=> setRate(e.target.value)}/>★★★★
-            <Ratebox  type="radio" name="rate" value="5" onClick={(e)=> setRate(e.target.value)}/>★★★★★
+            <Ratebox  type="radio" name="rate" value="1" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===1 ? 'checked' : ''} />★
+            <Ratebox  type="radio" name="rate" value="2" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===2 ? 'checked' : ''}/>★★
+            <Ratebox  type="radio" name="rate" value="3" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===3 ? 'checked' : ''}/>★★★
+            <Ratebox  type="radio" name="rate" value="4" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===4 ? 'checked' : ''}/>★★★★
+            <Ratebox  type="radio" name="rate" value="5" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===5 ? 'checked' : ''}/>★★★★★
             </Rate>
             <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewvalue[0].reviewTxt}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>수정</Subm>

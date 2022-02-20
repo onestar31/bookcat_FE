@@ -34,7 +34,7 @@ const Top = ({location:{pathname}}) => {
     return (
             <Titleset>
             <Title current={pathname==='/'}><Slink to="/">고양이와 책을</Slink></Title>
-            <Catimg src={process.env.PUBLIC_URL+`maincat2.png`}></Catimg>
+            <Catimg src={`${process.env.PUBLIC_URL}/maincat2.png`}></Catimg>
             </Titleset>
     )
 }
