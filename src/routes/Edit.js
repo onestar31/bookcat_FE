@@ -89,6 +89,7 @@ const Edit = ({history}) => {
     const [datas, setDatas] = useState('')
     const [rate, setRate] = useState(0)
     const [change, setChange] = useState(false)
+    const [gorender, setGoRender] = useState(false)
     const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
     const reviewvalue = useRecoilValue(reviewdataAtom) 
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
@@ -96,14 +97,15 @@ const Edit = ({history}) => {
 
     const reviewbid = reviewvalue[0].bookId
 
-    useEffect(()=>{
+    useEffect(async()=>{
         if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
         const isbn10 = reviewbid.slice(0,10)
         const isbn13 = reviewbid.slice(11)
-        booksdata(isbn10, isbn13)
+        await booksdata(isbn10, isbn13)
     } else {
-        booksdata(reviewbid)
+        await booksdata(reviewbid)
     }
+    setGoRender(true)
     },[])
 
     useEffect(()=>{
@@ -114,7 +116,7 @@ const Edit = ({history}) => {
         rid : reviewvalue[0].reviewId,  //reviewId 추가
         rtitle : writedata[0].writeTitle,
         rtext: writedata[0].writeTxt,
-        rate : +rate 
+        rate
     }).then(function(response) {
         console.log(response)
         alert(response.data.message)
@@ -144,6 +146,10 @@ const Edit = ({history}) => {
     setBookData(()=> [{'bookTitle': documents[0].title, 'bookAuthors': documents[0].authors}])
     setDatas(documents[0])
     } 
+
+    const onChange = (e) => {
+        setRate(e.target.value)
+    }
      
     return(
         <>
@@ -154,14 +160,14 @@ const Edit = ({history}) => {
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
-            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={ 'hello' }></Inputbox>
-            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={ 'hello' }></Inputbox> {/* //세번 눌러야하는 문제  */}
-            <Rate as="div">
-            <Ratebox  type="radio" name="rate" value="1" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===1 ? 'checked' : ''} />★
-            <Ratebox  type="radio" name="rate" value="2" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===2 ? 'checked' : ''}/>★★
-            <Ratebox  type="radio" name="rate" value="3" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===3 ? 'checked' : ''}/>★★★
-            <Ratebox  type="radio" name="rate" value="4" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===4 ? 'checked' : ''}/>★★★★
-            <Ratebox  type="radio" name="rate" value="5" onClick={(e)=> setRate(e.target.value)} checked={reviewvalue[0].reviewRate===5 ? 'checked' : ''}/>★★★★★
+            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={ gorender ? bookdata[0].bookTitle : null }></Inputbox>
+            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={ gorender ? bookdata[0].bookAuthors : null }></Inputbox>
+            <Rate as="div" onChange={onChange}>
+                <Ratebox type="radio" name="rate" value={1} defaultChecked={reviewvalue[0].reviewRate===1 ? true : false}/>★  
+                <Ratebox type="radio" name="rate" value={2} defaultChecked={reviewvalue[0].reviewRate===2 ? true : false}/>★★   
+                <Ratebox type="radio" name="rate" value={3} defaultChecked={reviewvalue[0].reviewRate===3 ? true : false}/>★★★ 
+                <Ratebox type="radio" name="rate" value={4} defaultChecked={reviewvalue[0].reviewRate===4 ? true : false}/>★★★★    
+                <Ratebox type="radio" name="rate" value={5} defaultChecked={reviewvalue[0].reviewRate===5 ? true : false}/>★★★★★  
             </Rate>
             <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewvalue[0].reviewTxt}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>수정</Subm>

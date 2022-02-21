@@ -130,7 +130,7 @@ const Storage = ({history}) => {
 
     useEffect (async() => {
         if (datas !== []){
-        for (let i=0; i<datas.length-60; i++){
+        for (let i=0; i<datas.length; i++){
             await booksdata(datas[i].bookId)
         }
     }
