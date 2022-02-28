@@ -19,7 +19,7 @@ flex-direction: column;
 text-align: center;
 align-content: center;`
 
-const Title = styled.div`
+const Title = styled.h1`
 width: 8rem;
 font-size: 28px;
 margin-top: 2.2rem;
@@ -50,10 +50,6 @@ font-size: 15px;
 padding-left: 7px;
 `
 
-const Tit = styled.div``
-
-const Info = styled.div``
-
 const Textbox = styled.textarea`
 border: 2px solid #828282;
 height: 18rem;
@@ -64,8 +60,6 @@ font-size: 13px;
 padding-left: 7px;
 padding-top: 7px;
 `
-
-const Starrate = styled(Inputbox)``
 
 const Subm = styled.button`
 margin-left: 100%;
@@ -90,7 +84,8 @@ const Edit = ({history}) => {
     const [rate, setRate] = useState(0)
     const [change, setChange] = useState(false)
     const [gorender, setGoRender] = useState(false)
-    const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용
+    const [onChangeValue, setonChangeValue] = useState('')
+    const { register, handleSubmit } = useForm() //useForm react-hook 사용
     const reviewvalue = useRecoilValue(reviewdataAtom) 
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
     const [writedata, setWriteData] = useRecoilState(writedataAtom)
@@ -131,7 +126,6 @@ const Edit = ({history}) => {
     //onSubmit를 한 경우 시행되는 코드 
     const writeSubmit = (data) => {
         setWriteData(()=> [{'writeTitle': data.rtitle, 'writeTxt': data.rtext}])
-        setBookData(()=> [{'bookTitle': data.btitle, 'bookAuthors': data.bauthor}])
         setChange(true)
     }
 
@@ -151,6 +145,10 @@ const Edit = ({history}) => {
         setRate(e.target.value)
     }
      
+    const changeValue = (e) => {
+        setonChangeValue(e.target.value)
+    }
+
     return(
         <>
         <Nickname />
@@ -160,8 +158,8 @@ const Edit = ({history}) => {
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
-            <Inputbox  placeholder='책 제목' {...register("btitle", {required: "input book title"})} defaultValue={ gorender ? bookdata[0].bookTitle : null }></Inputbox>
-            <Inputbox  placeholder='지은이' {...register("bauthor", {required: "input author"})} defaultValue={ gorender ? bookdata[0].bookAuthors : null }></Inputbox>
+            <Inputbox  placeholder='책 제목' required onChange={changeValue} value={ gorender ? bookdata[0].bookTitle : null}></Inputbox>
+            <Inputbox  placeholder='지은이' required onChange={changeValue} value={ gorender ? bookdata[0].bookAuthors : null}></Inputbox>
             <Rate as="div" onChange={onChange}>
                 <Ratebox type="radio" name="rate" value={1} defaultChecked={reviewvalue[0].reviewRate===1 ? true : false}/>★  
                 <Ratebox type="radio" name="rate" value={2} defaultChecked={reviewvalue[0].reviewRate===2 ? true : false}/>★★   

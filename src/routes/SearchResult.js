@@ -1,4 +1,4 @@
-import { getByTitle } from '@testing-library/react'
+
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Navigation from '../components/Navigation'
@@ -19,7 +19,7 @@ align-content: center;
 align-items: center;
 `
 
-const Resultname = styled.div`
+const Resultname = styled.h1`
 margin-top: 5rem;
 text-align: center;
 font-size: 30px;`

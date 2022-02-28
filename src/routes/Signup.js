@@ -9,7 +9,7 @@ import Nickname from 'components/Nickname'
 
 //회원가입 구현
 
-const Logintit = styled.div`
+const Title = styled.h1`
 font-family: 'OTWelcomeRA';
 text-align: center;
 font-weight: 500;
@@ -142,7 +142,7 @@ const Signup = ({history}) => {
     <Nickname />
     <Top />
     <Navigation />
-    <Logintit>회원가입</Logintit>
+    <Title>회원가입</Title>
     {/*<Footprint1 src="footprint.png"></Footprint1>*/}
     <Loginform onSubmit={onSubmit}>
         <Nick type="text" required placeholder='닉네임' name="nickname" value={nickname} onChange={onChange}></Nick><br/>

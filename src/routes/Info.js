@@ -4,7 +4,6 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import Nickname from 'components/Nickname'
 import axios from 'axios'
-import { useState } from 'react/cjs/react.development'
 import { useForm } from 'react-hook-form'
 
 
@@ -17,7 +16,7 @@ flex-direction: column;
 text-align: center;
 align-content: center;
 `
-const Title = styled.div`
+const Title = styled.h1`
 width: 8rem;
 font-size: 28px;
 margin-top: 2.2rem;
@@ -118,7 +117,7 @@ font-size: 15px;
 `
 
 const Info = () => {
-    const { register, handleSubmit, setError, setValue } = useForm()
+    const { register, handleSubmit, setValue } = useForm()
 
     const email = sessionStorage.getItem('email')
     const nickname = sessionStorage.getItem('nickname')
@@ -126,18 +125,20 @@ const Info = () => {
 
     const changePw = (data) => {
         if (data.newpw === data.checkpw) {
-            axios.patch(`http://localhost:8000/changePw/`, {
+            axios.patch(`http://localhost:8000/user/changepw`, {
                 newPw: data.newpw,
                 userEmail: email,
-                userPw: data.userPw,
+                userPw: data.curpw,
             })
                 .then(function (response) {
-                    console.log(response.data.message);
+                    alert(response.data.message);
+                    setValue(data.curpw, '')
                 })
                 .catch(function (error) {
-                    console.log(error.response.data.message);
+                    alert(error.response.data.message);
                 });
         }
+        window.location.replace('info')
     }
 
     return (

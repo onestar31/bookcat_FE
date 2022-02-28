@@ -8,7 +8,7 @@ import Nickname from 'components/Nickname'
 
 //로그인 구현
 
-const Logintit = styled.div`
+const Title = styled.h1`
 font-family: 'OTWelcomeRA';
 text-align: center;
 font-weight: 500;
@@ -92,7 +92,6 @@ color: white;
 const Login = ({history}) => {
     const [emailState, setEmail] = useState('')
     const [passwordState, setPassword] = useState('')
-    const [loginState, setLogin] = useState(false)
 
     const onChange = (e) => {
         const {target: {value, name}} = e
@@ -126,7 +125,7 @@ const Login = ({history}) => {
     <Nickname />
     <Top />
     <Navigation />
-    <Logintit>로그인</Logintit>
+    <Title>로그인</Title>
     {/*<Footprint1 src="footprint.png"></Footprint1>*/}
     <Loginform onSubmit={onSubmit}>
         <Email type="email" required placeholder='이메일' name='email' value={emailState} onChange={onChange}></Email><br/>

@@ -8,9 +8,9 @@ import Nickname from 'components/Nickname'
 import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
 import { reviewdataAtom } from 'components/Atom'
-import { useSetRecoilState, useRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpaghettiMonsterFlying, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 
 //서평 공간 구현
@@ -22,7 +22,7 @@ flex-direction: column;
 text-align: center;
 align-content: center;`
 
-const Title = styled.div`
+const Title = styled.h1`
 width: 8rem;
 font-size: 28px;
 margin-top: 2.2rem;
@@ -113,7 +113,6 @@ const Storage = ({history}) => {
     const [thumbnail, setThumbnail] = useState([])
     const [title, setTitle] = useState([])
     const [noData, setNoData] = useState(true) 
-    const [imges, setImges] = useState(false)
     const setreviewdata = useSetRecoilState(reviewdataAtom)
 
     //장고로 부터 데이터 가져오는 api
@@ -153,7 +152,7 @@ const Storage = ({history}) => {
     const moveDetail = (data) => {
         console.log(data)       //변수 이름 맞는지 확인하기
         setreviewdata(() => [{'bookId': data.bookId, 'reviewId': data.id, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
-        history.push(`/detail/${data.bookId}`)        //reviewId 추가
+        history.push(`/detail`)        //reviewId 추가
     }
    
     return(

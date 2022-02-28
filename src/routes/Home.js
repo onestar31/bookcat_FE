@@ -1,11 +1,10 @@
-import { getByTitle } from '@testing-library/react'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
-import { ResultApi } from '../ResultApi'
 import {withRouter} from 'react-router-dom'
 import Nickname from 'components/Nickname'
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 
 //메인 검색 화면 및 검색 결과 화면 구현
@@ -36,7 +35,7 @@ top: 160px;
 text-align: center;
 `
 const Form = styled.form``
-const Keytit = styled.div`
+const Keytitle = styled.h1`
 font-size: 32px;
 color: #D15C5C;
 margin: 23px 0 ;
@@ -75,13 +74,20 @@ const Home = ({history}) => {
     
     return(
         <>
+        <HelmetProvider>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>고양이와 책을 서평 작성 웹 사이트</title>
+            <meta name="description" content="'고양이와 책을'은 읽은 책에 대한 서평을 쓰고 개인 공간에 저장할 수 있는 서평 작성 사이트 입니다."></meta>
+        </Helmet>
+        </HelmetProvider>
         <Nickname />
         <Top />
         <Navigation />
     <Body>
-    <Bodypic src={`${process.env.PUBLIC_URL}/mainbookself.jpeg`}></Bodypic>
+    <Bodypic src={`${process.env.PUBLIC_URL}/mainbookself.jpeg`} alt="메인페이지의 서적 배경 이미지"></Bodypic>
     <Keyform>
-        <Keytit>키워드를 입력하세요</Keytit>
+        <Keytitle>키워드를 입력하세요</Keytitle>
         <Keyexp>고양이와 책을에서 키워드에 맞는 책을 읽고<br/> 나만의 서평을 작성해보세요</Keyexp>
         <Form onSubmit={putKeyWord}>
         <div><Keyinput type="text" value={keyvalue} onChange={keyvaluefunc}></Keyinput></div>

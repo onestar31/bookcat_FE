@@ -2,14 +2,13 @@ import React, { useEffect, useState} from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { withRouter, Link } from 'react-router-dom'
-import { ResultApi } from '../ResultApi'
+import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { useForm } from 'react-hook-form'
 import { bookdataAtom } from 'components/Atom'
 import { writedataAtom } from 'components/Atom'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 //서평쓰기 폼 구현
 
@@ -51,10 +50,6 @@ font-size: 15px;
 padding-left: 7px;
 `
 
-const Tit = styled.div``
-
-const Info = styled.div``
-
 const Textbox = styled.textarea`
 border: 2px solid #828282;
 height: 18rem;
@@ -65,8 +60,6 @@ font-size: 13px;
 padding-left: 7px;
 padding-top: 7px;
 `
-
-const Starrate = styled(Inputbox)``
 
 const Subm = styled.button`
 margin-left: 100%;
@@ -98,7 +91,7 @@ const Write = ({history}) => {
 
     const [change, setChange] = useState(false)
     const [rate, setRate] = useState(0)
-    const { register, watch, handleSubmit, formState, setError, setValue } = useForm() //useForm react-hook 사용 //new 주석
+    const { register, handleSubmit } = useForm() //useForm react-hook 사용 //new 주석
 
     //writeSubmit가 구동된 후 change 상태가 변화할 때 시행되는 장고로 데이터 post 하는 코드
     useEffect(()=> {
@@ -135,7 +128,6 @@ const Write = ({history}) => {
     const year = today.getFullYear()
     const month = today.getMonth()
     const date = today.getDate()
-    const rid = today.getTime()
     const day = year+'.'+month+'.'+(date+1)+'.'
 
    /*  //rate ★

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react/cjs/react.development'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
-import { withRouter, useParams } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { reviewdataAtom } from 'components/Atom'
 import { useRecoilValue } from 'recoil'
 
@@ -141,13 +141,14 @@ const Detail = ({history}) => {
 
     //삭제 버튼 누르면 삭제 
     const goDelete = () => {
-        console.log(reviewdata)
+        console.log(reviewdata[0].reviewId)
         axios.delete('http://127.0.0.1:8000/review/delete/', {data : {
         reviewId : reviewdata[0].reviewId
     }})
     .then(function (response) {
         alert(response.data.message)
         console.log(response);
+        history.push('/storage')
     })
     .catch(function (error) {
         alert(error.response.data.message)
