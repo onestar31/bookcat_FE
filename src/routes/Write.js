@@ -38,6 +38,9 @@ margin-top: 3.7rem;
 height: 25rem;
 width: 50rem;
 font-size: 12px;
+@media screen and (max-width: 700px) {
+        width: 30rem;
+    }
 `
 
 const Inputbox = styled.input`

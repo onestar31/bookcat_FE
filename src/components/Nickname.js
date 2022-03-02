@@ -7,8 +7,11 @@ font-family: 'YanoljaYacheR';
 height: 2vh;
 display: block;
 text-align: right;
-margin-right: 28vh;
+margin-right: 6%;
 margin-top: 2vh;
+@media screen and (max-width: 1100px) {
+        margin-right: 4%;
+    }
 `
 
 const Nick = styled.span``
@@ -19,7 +22,7 @@ color: black;`
 
 const Logout = styled.button`
 font-family: inherit;
-width: 5vw;
+width: 50px;
 height: 3vh;
 background: #E8A5A5;
 border: none;

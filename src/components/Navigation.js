@@ -15,13 +15,17 @@ font-family: 'YanoljaYacheR';
 margin-top: 26px;
 padding: 6px 0;
 background-color: #EBCACA;
-width: 1100px;
+max-width: 1100px;
 margin-left: auto;
 margin-right: auto;
 font-size: 20px;
+@media screen and (max-width: 700px) {
+        flex-direction: column;
+    }
 `
 const List = styled.li`
-padding: 5px 80px 0 80px;
+padding: 5px 70px 0 70px;
+min-width: 55px;
 text-align: center;
 `
 const Slink = styled(NavLink)`

@@ -27,11 +27,15 @@ align-items: center;`
 const Reviewform = styled.div`
 margin-top: 2rem;
 width: 50rem;
-height: 31rem;
+height: auto;
+min-height: 31rem;
 background: #F5E5E5;
 text-align: center;
 align-items: center;
-align-content: center;`
+align-content: center;
+@media screen and (max-width: 700px) {
+    height: auto;
+    }`
 
 const ReviewTitle = styled.div`
 padding-top: 2rem;
@@ -44,7 +48,10 @@ text-align: start;
 padding-left: 5.6rem;
 padding-top: 1rem;
 font-size: 19px;
-padding-bottom: 2rem;`
+padding-bottom: 2rem;
+@media screen and (max-width: 700px) {
+        text-align: center;
+    }`
 
 const Bookinfo = styled.div`
 display: flex;
@@ -57,16 +64,29 @@ margin-left: 50%;
 transform: translateX(-50%);
 border-top: 0.1rem solid black;
 border-bottom: 0.1rem solid black;
+@media screen and (max-width: 700px) {
+        flex-direction: column;
+        height: 30rem;
+    }
 `
 const Bookimg = styled.img`
 height: 90%;
+@media screen and (max-width: 700px) {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 150px;
+    height: 220px;
+    }
 `
 const Bookcontainer = styled.div`
 display: flex;
 flex-direction: column;
 margin-left: 14px;
 margin-right: 14px;
-text-align: start;`
+text-align: start;
+@media screen and (max-width: 700px) {
+        text-align: center;
+    }`
 
 const Booktitle = styled.div`
 font-size: 28px;

@@ -38,6 +38,9 @@ margin-top: 3.7rem;
 height: 25rem;
 width: 50rem;
 font-size: 12px;
+@media screen and (max-width: 700px) {
+        width: 30rem;
+    }
 `
 
 const Inputbox = styled.input`
@@ -149,6 +152,12 @@ const Edit = ({history}) => {
         setonChangeValue(e.target.value)
     }
 
+    const limitTextLength = (e) => {
+        if (e.target.value.length > 1000) {
+            alert('제한 글자수 초과입니다.')
+        }
+    }
+
     return(
         <>
         <Nickname />
@@ -157,7 +166,7 @@ const Edit = ({history}) => {
         <Body>
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
-            <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
+            <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} maxLength='30' defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
             <Inputbox  placeholder='책 제목' required onChange={changeValue} value={ gorender ? bookdata[0].bookTitle : null}></Inputbox>
             <Inputbox  placeholder='지은이' required onChange={changeValue} value={ gorender ? bookdata[0].bookAuthors : null}></Inputbox>
             <Rate as="div" onChange={onChange}>
@@ -167,7 +176,7 @@ const Edit = ({history}) => {
                 <Ratebox type="radio" name="rate" value={4} defaultChecked={reviewvalue[0].reviewRate===4 ? true : false}/>★★★★    
                 <Ratebox type="radio" name="rate" value={5} defaultChecked={reviewvalue[0].reviewRate===5 ? true : false}/>★★★★★  
             </Rate>
-            <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewvalue[0].reviewTxt}></Textbox>
+            <Textbox  {...register("rtext", {required: "input your text", maxLength: 1000})} defaultValue={reviewvalue[0].reviewTxt} onChange={limitTextLength}></Textbox>
             <Subm  onClick={handleSubmit(writeSubmit)}>수정</Subm>
         </Writeform>
     </Body> 

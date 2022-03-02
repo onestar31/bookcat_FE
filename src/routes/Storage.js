@@ -46,15 +46,24 @@ align-content: center;
 width: 48rem;
 height: 12rem;
 margin-top: 2.7rem;
-margin-left: 50%;
+margin-left: 48%;
 transform: translateX(-50%);
 background: #F3CACA;
+@media screen and (max-width: 700px) {
+        width: 500px;
+        height: 400px;
+        flex-direction: column;
+    }
 `
 const Bookimg = styled.div`
 height: 100%;
 width: 9.2rem;
 background-image: ${props => props.bground ? `url(${props.bground})` : `url(${process.env.PUBLIC_URL}/nobookimg.jpg)`};
 background-size : cover;
+@media screen and (max-width: 700px) {
+        height: 12rem;
+        margin-top: 15px;
+    }
 `
 const Bookcontainer = styled.div`
 display: flex;
@@ -64,6 +73,9 @@ margin-left: 14px;
 margin-right: 14px;
 height: 11.9rem;
 text-align: start;
+@media screen and (max-width: 700px) {
+        text-align: center;
+    }
 `
 
 const Writetitle = styled.div`
@@ -82,17 +94,29 @@ font-weight: 100;
 font-size: 16px;
 height: 4.5rem;
 width: 34rem;
+@media screen and (max-width: 700px) {
+        width: 470px;
+        text-align: center;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
 `
 
 const Date = styled.div`
 text-align: end;
 margin-bottom: 0.3rem;
+@media screen and (max-width: 700px) {
+        position: absolute;
+        right: 12px;
+        bottom: 10px;
+    }
 `
 const Rate = styled.div`
 position: absolute;
 top : 1.4rem;
 right: 1.4rem;
 display: flex;
+
 `
 
 const Star1 = styled.div`
@@ -176,7 +200,7 @@ const Storage = ({history}) => {
                 <Bookcontainer>
                 <Writetitle>{data.reviewTitle}</Writetitle>   {/*// 모델 수정 必 */}
                 <Booktitle>{title[idx]}</Booktitle>    
-                <Writecontent>{data.reviewTxt}...</Writecontent>
+                <Writecontent>{data.reviewTxt.length>129 ? data.reviewTxt.slice(0,130)+'...' : data.reviewTxt}</Writecontent>
                {/* rid 받아서 리뷰 구분할 필요 없을까?*/}
                <Date>{data.reviewDate}</Date>
                 </Bookcontainer>
