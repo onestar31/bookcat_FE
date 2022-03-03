@@ -1,8 +1,7 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { useEffect, useState } from 'react/cjs/react.development'
 import Nickname from 'components/Nickname'
 import { ResultApi } from '../ResultApi'
 import { withRouter } from 'react-router-dom'
@@ -26,7 +25,7 @@ align-items: center;`
 
 const Reviewform = styled.div`
 margin-top: 2rem;
-width: 50rem;
+max-width: 50rem;
 height: auto;
 min-height: 31rem;
 background: #F5E5E5;

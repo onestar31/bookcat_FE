@@ -16,14 +16,13 @@ display: flex;
 `
 
 const Bodypic = styled.img`
-position: absolute;
-width: 70%;
+display: flex;
+width: 950px;
 height: 74vh;
 opacity: 55%;
-margin-left: 50%;
-transform: translateX(-50%);
+margin: 0 auto;
 @media screen and (max-width: 500px) {
-        width: 90%;
+       
     }
 `
 
@@ -44,6 +43,7 @@ align-items: center;
 vertical-align: middle;
 `
 const Form = styled.form``
+
 const Keytitle = styled.h1`
 font-size: 32px;
 color: #D15C5C;

@@ -32,21 +32,36 @@ align-content: center;
 width: 50rem;
 height: 21rem;
 margin-top: 4rem;
-background: #EBCACA;`
+background: #EBCACA;
+@media screen and (max-width: 700px) {
+        width: 500px;
+        min-height: 520px;
+        flex-direction: column;
+    }`
 
 const Bookimg = styled.img`
 height: 90%;
 margin-left: 2%;
+@media screen and (max-width: 700px) {
+        height: 12rem;
+        margin-top: 15px;
+    }
 `
 const Bookcontainer = styled.div`
 display: flex;
 flex-direction: column;
 margin-left: 14px;
-margin-right: 14px;`
+margin-right: 14px;
+@media screen and (max-width: 700px) {
+        text-align: center;
+    }`
 
 const Booktitle = styled.div`
 font-size: 28px;
-margin-bottom: 1rem;`
+margin-bottom: 1rem;
+@media screen and (max-width: 700px) {
+        margin-top: 10px;
+    }`
 
 const Bookauthors = styled.div`
 font-size: 23px;
@@ -54,7 +69,13 @@ margin-bottom: 1rem;`
 
 const Bookcontents = styled.div`
 font-size: 19px;
-width: 34rem;`
+width: 34rem;
+@media screen and (max-width: 700px) {
+        width: 470px;
+        text-align: center;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }`
 
 const Bookurl = styled.a`
 text-decoration: none;
@@ -62,7 +83,13 @@ margin-top: 1rem;
 font-size: 19px;
 color: #C05F5F;
 width: 1.7rem;
-border-bottom: 1px solid #C05F5F;`
+border-bottom: 1px solid #C05F5F;
+@media screen and (max-width: 700px) {
+    transform: translateX(-50%);
+    margin-left: 50%;
+    margin-bottom: 10px;
+        text-align: center;
+    }`
 
 const Bookreview = styled.button`
 border: none;
@@ -74,7 +101,10 @@ padding: 5px 0px;
 margin-top: 1rem;
 margin-left: 80%;
 text-align: center;
-background: #E8A5A5;`
+background: #E8A5A5;
+@media screen and (max-width: 700px) {
+        margin: 0 auto;
+    }`
 
 const SearchResult = ({history}) => {
     const [data, setData] = useState([])

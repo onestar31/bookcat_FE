@@ -23,7 +23,7 @@ padding-bottom: 4px;
 const Infoform = styled.form`
 margin-left: 50%;
 transform: translateX(-50%);
-width: 50rem;
+width: 800px;
 margin-top: 3.7rem;
 border: 1px solid #828282;
 height: 23rem;

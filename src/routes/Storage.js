@@ -1,8 +1,7 @@
-import React from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { useEffect, useState } from 'react/cjs/react.development'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Nickname from 'components/Nickname'
 import { withRouter } from 'react-router-dom'
@@ -46,8 +45,8 @@ align-content: center;
 width: 48rem;
 height: 12rem;
 margin-top: 2.7rem;
-margin-left: 48%;
-transform: translateX(-50%);
+margin-left: auto;
+margin-right: auto;
 background: #F3CACA;
 @media screen and (max-width: 700px) {
         width: 500px;
