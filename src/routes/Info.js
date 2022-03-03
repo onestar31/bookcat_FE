@@ -8,14 +8,6 @@ import { useForm } from 'react-hook-form'
 
 
 //내 정보 구현
-
-const Body = styled.div`
-font-family: 'YanoljaYacheR';
-display: flex;
-flex-direction: column;
-text-align: center;
-align-content: center;
-`
 const Title = styled.h1`
 width: 8rem;
 font-size: 28px;
@@ -146,7 +138,6 @@ const Info = () => {
             <Nickname />
             <Top />
             <Navigation />
-            <Body>
                 <Title>나의 정보</Title>
                 <Infoform onSubmit={handleSubmit(changePw)}>
                     <NickEml>
@@ -170,7 +161,6 @@ const Info = () => {
                     </Pswform>
 
                 </Infoform>
-            </Body>
         </>
     )
 }

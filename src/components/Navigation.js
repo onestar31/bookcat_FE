@@ -21,6 +21,7 @@ margin-right: auto;
 font-size: 20px;
 @media screen and (max-width: 700px) {
         flex-direction: column;
+        width: 600px;
     }
 `
 const List = styled.li`

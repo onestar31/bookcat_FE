@@ -86,7 +86,7 @@ const Home = ({history}) => {
         <HelmetProvider>
         <Helmet>
             <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+            {/* <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta> */}
             <title>고양이와 책을 서평 작성 웹 사이트</title>
             <meta name="description" content="'고양이와 책을'은 읽은 책에 대한 서평을 쓰고 개인 공간에 저장할 수 있는 서평 작성 사이트 입니다."></meta>
         </Helmet>

@@ -14,6 +14,7 @@ text-align: center;
 font-weight: 500;
 font-size: 23px;
 padding-top: 2rem;
+width: 100vw;
 
 `
 const Footprint1 = styled.img`
