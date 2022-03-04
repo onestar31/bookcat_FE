@@ -42,6 +42,7 @@ footer, header, hgroup, main, menu, nav, section {
 body {
 font-family: 'YanoljaYacheR';
   width: 100vw;
+  height: 100vh;
 }
 a{
   text-decoration: none;
