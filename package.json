@@ -24,7 +24,7 @@
     "styled-components": "^5.3.3",
     "web-vitals": "^1.1.2"
   },
-  "homepage": "http://onestar31.github.io/bookcat_fe",
+  "homepage": "https://onestar31.github.io/bookcat_FE",
   "scripts": {
     "start": "cross-env NODE_PATH=public react-scripts start",
     "build": "cross-env NODE_PATH=public react-scripts build",

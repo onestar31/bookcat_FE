@@ -15,7 +15,7 @@ import SearchResult from "routes/SearchResult";
 
 const Router = () => {
     return(
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
                 <PublicRoute path='/' component={Home} exact></PublicRoute>
                 <PublicRoute path='/searchresult' component={SearchResult} exact></PublicRoute>
