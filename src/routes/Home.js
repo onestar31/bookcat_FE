@@ -5,7 +5,7 @@ import Top from '../components/Top'
 import {withRouter} from 'react-router-dom'
 import Nickname from '../components/Nickname'
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import MainBookShelf from '../mainbookself.jpeg'
+import MainBookShelf from '../mainbookshelf.jpeg'
 
 
 //메인 검색 화면 및 검색 결과 화면 구현

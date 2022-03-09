@@ -5,7 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
-    mode: 'none',
+    mode: 'production',
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
@@ -42,7 +42,7 @@ module.exports = {
         extensions: ['.jsx', '.js'],
       },
       devServer: {
-        port: 9070,
+        port: 9080,
       },
     plugins: [
         new HtmlWebpackPlugin({
