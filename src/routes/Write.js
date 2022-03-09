@@ -4,10 +4,10 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 import { useForm } from 'react-hook-form'
-import { bookdataAtom } from 'components/Atom'
-import { writedataAtom } from 'components/Atom'
+import { bookdataAtom } from '../components/Atom'
+import { writedataAtom } from '../components/Atom'
 import { useRecoilState } from 'recoil'
 
 //서평쓰기 폼 구현

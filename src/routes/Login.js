@@ -4,7 +4,7 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import axios from 'axios'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 
 //로그인 구현
 

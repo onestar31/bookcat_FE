@@ -3,10 +3,10 @@ import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
 import axios from 'axios'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 import { ResultApi } from '../ResultApi'
 import { withRouter } from 'react-router-dom'
-import { reviewdataAtom } from 'components/Atom'
+import { reviewdataAtom } from '../components/Atom'
 import { useRecoilValue } from 'recoil'
 
 //서평 공간 구현

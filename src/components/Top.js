@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
+import CatImg from '../maincat2.png'
 
 //고양이와 책을 메인 타이틀//
 const Titleset = styled.div`
@@ -31,7 +32,7 @@ const Top = ({location:{pathname}}) => {
     return (
             <Titleset>
             <Title current={pathname==='/'}><Slink to="/">고양이와 책을</Slink></Title>
-            <Catimg src={`${process.env.PUBLIC_URL}/maincat2.png`} alt='메인 고양이 이미지'></Catimg>
+            <Catimg src={CatImg} alt='메인 고양이 이미지'></Catimg>
             </Titleset>
     )
 }

@@ -5,8 +5,8 @@ import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import { ResultApi } from '../ResultApi'
 import {withRouter} from 'react-router-dom'
-import Nickname from 'components/Nickname'
-import {bookdataAtom} from 'components/Atom'
+import Nickname from '../components/Nickname'
+import {bookdataAtom} from '../components/Atom'
 import {useSetRecoilState} from 'recoil' 
 
 //메인 검색 화면 및 검색 결과 화면 구현

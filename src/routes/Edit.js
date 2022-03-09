@@ -2,12 +2,12 @@ import React, { useEffect, useState} from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
 import axios from 'axios'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 import { useForm } from 'react-hook-form'
-import { reviewdataAtom, bookdataAtom, writedataAtom } from 'components/Atom'
+import { reviewdataAtom, bookdataAtom, writedataAtom } from '../components/Atom'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 //서평쓰기 폼 구현
@@ -114,7 +114,7 @@ const Edit = ({history}) => {
         rid : reviewvalue[0].reviewId,  //reviewId 추가
         rtitle : writedata[0].writeTitle,
         rtext: writedata[0].writeTxt,
-        rate
+        rate : rate === 0 ? reviewvalue[0].reviewRate : rate,
     }).then(function(response) {
         console.log(response)
         alert(response.data.message)

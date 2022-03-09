@@ -2,7 +2,7 @@ import React from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 

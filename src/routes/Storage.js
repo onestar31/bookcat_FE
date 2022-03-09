@@ -3,14 +3,14 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 import { withRouter } from 'react-router-dom'
 import { ResultApi } from '../ResultApi'
-import { reviewdataAtom } from 'components/Atom'
+import { reviewdataAtom } from '../components/Atom'
 import { useSetRecoilState } from "recoil"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-
+import NoBookImg from '../nobookimg.jpg'
 
 //서평 공간 구현
 
@@ -57,7 +57,7 @@ background: #F3CACA;
 const Bookimg = styled.div`
 height: 100%;
 width: 9.2rem;
-background-image: ${props => props.bground ? `url(${props.bground})` : `url(${process.env.PUBLIC_URL}/nobookimg.jpg)`};
+background-image: ${props => props.bground ? `url(${props.bground})` : `url(${NoBookImg})`};
 background-size : cover;
 @media screen and (max-width: 700px) {
         height: 12rem;

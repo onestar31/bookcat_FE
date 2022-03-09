@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import {withRouter} from 'react-router-dom'
-import Nickname from 'components/Nickname'
+import Nickname from '../components/Nickname'
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import MainBookShelf from '../mainbookself.jpeg'
 
 
 //메인 검색 화면 및 검색 결과 화면 구현
@@ -95,7 +96,7 @@ const Home = ({history}) => {
         <Top />
         <Navigation />
     <Body>
-    <Bodypic src={`${process.env.PUBLIC_URL}/mainbookself.jpeg`} alt="메인페이지의 서적 배경 이미지"></Bodypic>
+    <Bodypic src={MainBookShelf} alt="메인페이지의 서적 배경 이미지"></Bodypic>
     <Keyform>
         <Keytitle>키워드를 입력하세요</Keytitle>
         <Keyexp>고양이와 책을에서 키워드에 맞는 책을 읽고<br/> 나만의 서평을 작성해보세요</Keyexp>
