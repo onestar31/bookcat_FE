@@ -130,7 +130,7 @@ const Info = () => {
                     alert(error.response.data.message);
                 });
         }
-        window.location.replace('info')
+        window.location.reload()
     }
 
     return (

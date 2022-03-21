@@ -42,7 +42,7 @@ module.exports = {
         extensions: ['.jsx', '.js'],
       },
       devServer: {
-        port: 9080,
+        port: 9070,
       },
     plugins: [
         new HtmlWebpackPlugin({

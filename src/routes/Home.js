@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import Navigation from '../components/Navigation'
@@ -5,8 +6,6 @@ import Top from '../components/Top'
 import {withRouter} from 'react-router-dom'
 import Nickname from '../components/Nickname'
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import MainBookShelf from '../mainbookshelf.jpeg'
-
 
 //메인 검색 화면 및 검색 결과 화면 구현
 
@@ -16,12 +15,13 @@ font-family: 'YanoljaYacheR';
 display: flex;
 `
 
-const Bodypic = styled.img`
+const Bodypic = styled.div`
 display: flex;
 width: 950px;
 height: 74vh;
 opacity: 55%;
 margin: 0 auto;
+background-image : url('https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/mainbookshelf.jpeg');
 @media screen and (max-width: 500px) {
        
     }
@@ -96,7 +96,7 @@ const Home = ({history}) => {
         <Top />
         <Navigation />
     <Body>
-    <Bodypic src={MainBookShelf} alt="메인페이지의 서적 배경 이미지"></Bodypic>
+    <Bodypic></Bodypic>
     <Keyform>
         <Keytitle>키워드를 입력하세요</Keytitle>
         <Keyexp>고양이와 책을에서 키워드에 맞는 책을 읽고<br/> 나만의 서평을 작성해보세요</Keyexp>
