@@ -143,7 +143,7 @@ const SearchResult = ({history}) => {
     <Resultform>
         <Resultname>'{keyword}' 검색한 결과</Resultname> 
     {data.map((book)=> <Resultbox key={book.isbn}>
-        <Bookimg src={book.thumbnail || `${process.env.PUBLIC_URL}/nobookimg.jpg`}></Bookimg>
+        <Bookimg src={book.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
         <Bookcontainer>
         <Booktitle>{book.title}</Booktitle>
         <Bookauthors>{book.authors}</Bookauthors>

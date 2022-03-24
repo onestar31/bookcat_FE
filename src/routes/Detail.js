@@ -186,7 +186,7 @@ const Detail = ({history}) => {
         <Reviewform>
             <ReviewTitle>{reviewdata[0].reviewTitle}</ReviewTitle>
             <Bookinfo>
-                <Bookimg src={bookdata?.thumbnail}></Bookimg>
+                <Bookimg src={bookdata?.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
                 <Bookcontainer>
                 <Booktitle>{bookdata?.title}</Booktitle>
                 <Bookauthors>{bookdata?.authors}</Bookauthors>

@@ -10,7 +10,6 @@ import { reviewdataAtom } from '../components/Atom'
 import { useSetRecoilState } from "recoil"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import NoBookImg from '../nobookimg.jpg'
 
 //서평 공간 구현
 
@@ -57,7 +56,7 @@ background: #F3CACA;
 const Bookimg = styled.div`
 height: 100%;
 width: 9.2rem;
-background-image: ${props => props.bground ? `url(${props.bground})` : ``};
+background-image: ${props => props.bground ? `url(${props.bground})` : `url(https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg)`};
 background-size : cover;
 @media screen and (max-width: 700px) {
         height: 12rem;
@@ -152,7 +151,7 @@ const Storage = ({history}) => {
 
     useEffect (async() => {
         if (datas !== []){
-        for (let i=0; i<datas.length; i++){
+        for (let i=0; i<datas.length-1; i++){
             await booksdata(datas[i].bookId)
         }
     }

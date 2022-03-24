@@ -155,7 +155,7 @@ const Review = ({history}) => {
         <Reviewform>
             <ReviewTitle>{writevalue[0].writeTitle}</ReviewTitle>
             <Bookinfo>
-                <Bookimg src={data.thumbnail}></Bookimg>
+                <Bookimg src={data.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
                 <Bookcontainer>
                 <Booktitle>{data.title}</Booktitle>
                 <Bookauthors>{data.authors}</Bookauthors>
