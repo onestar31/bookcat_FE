@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Nickname from '../components/Nickname'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
+import { withRouter } from 'react-router-dom'
 
 
 //내 정보 구현
@@ -108,7 +109,7 @@ font-family: 'YanoljaYacheR' !important;
 font-size: 15px;
 `
 
-const Info = () => {
+const Info = ({history}) => {
     const { register, handleSubmit, setValue } = useForm()
 
     const email = sessionStorage.getItem('email')
@@ -130,7 +131,7 @@ const Info = () => {
                     alert(error.response.data.message);
                 });
         }
-        window.location.reload()
+        history.push('/')
     }
 
     return (
@@ -165,4 +166,4 @@ const Info = () => {
     )
 }
 
-export default Info
+export default withRouter(Info)

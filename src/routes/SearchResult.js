@@ -132,7 +132,7 @@ const SearchResult = ({history}) => {
     const toreview = (book) =>{
         setBookData(()=> [{'isbn': book.isbn, 'bookTitle': book.title, 'bookAuthors': book.authors}])
         let id = book.isbn
-        history.push(`/write`)
+        history.push(`/write/api`)
     }
     
     return(
