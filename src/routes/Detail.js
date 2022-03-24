@@ -42,7 +42,7 @@ padding-bottom: 1rem;
 font-size: 30px;
 `
 const Reviewtext = styled.div`
-width: 40rem;
+width: 45rem;
 text-align: start;
 padding-left: 5.6rem;
 padding-top: 1rem;

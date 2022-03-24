@@ -37,7 +37,10 @@ const Nickname = ({history}) => {
 
     const Logouts = () => {
         sessionStorage.removeItem('nickname')
-        window.location.replace(`${history.location.pathname}`)
+        sessionStorage.removeItem('email')
+        sessionStorage.removeItem('uid')
+        alert('로그아웃 되었습니다.')
+        history.push('/')
     }
     return (
         <>

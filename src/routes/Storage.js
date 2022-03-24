@@ -57,7 +57,7 @@ background: #F3CACA;
 const Bookimg = styled.div`
 height: 100%;
 width: 9.2rem;
-background-image: ${props => props.bground ? `url(${props.bground})` : `url(${NoBookImg})`};
+background-image: ${props => props.bground ? `url(${props.bground})` : ``};
 background-size : cover;
 @media screen and (max-width: 700px) {
         height: 12rem;
@@ -142,8 +142,8 @@ const Storage = ({history}) => {
     useEffect(()=>{
         axios.get('http://127.0.0.1:8000/review/')
         .then((response) => {
-            setDatas(response.data)
-            console.log((response.data))
+            setDatas(response.data.filter((data) => data.userId === +sessionStorage.getItem('uid')))
+            console.log(response.data)
             setNoData(false)
         }).catch((error)=>{
             console.log(error)

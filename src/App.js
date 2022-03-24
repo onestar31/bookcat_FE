@@ -1,7 +1,5 @@
 import React from 'react'
 import Router from './components/Router'
-import Navigation from './components/Navigation';
-import Top from './components/Top'
 import './App.css'
 import {createGlobalStyle} from 'styled-components'
 

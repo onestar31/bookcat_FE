@@ -24,7 +24,7 @@ align-content: center;
 align-items: center;`
 
 const Reviewform = styled.div`
-margin-top: 2rem;
+margin-top: 4rem;
 max-width: 50rem;
 height: auto;
 min-height: 31rem;
@@ -32,6 +32,8 @@ background: #F5E5E5;
 text-align: center;
 align-items: center;
 align-content: center;
+padding-left: 2rem;
+padding-right: 2rem;
 @media screen and (max-width: 700px) {
     height: auto;
     }`

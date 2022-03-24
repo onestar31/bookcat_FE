@@ -48,10 +48,13 @@ margin-left: 2%;
     }
 `
 const Bookcontainer = styled.div`
+position: relative;
 display: flex;
 flex-direction: column;
 margin-left: 14px;
 margin-right: 14px;
+width: 100%;
+height: 17rem;
 @media screen and (max-width: 700px) {
         text-align: center;
     }`
@@ -92,16 +95,17 @@ border-bottom: 1px solid #C05F5F;
     }`
 
 const Bookreview = styled.button`
+position: absolute;
 border: none;
 outline: none;
 font-family: inherit !important;
 font-size: 20px;
 width: 5rem;
 padding: 5px 0px;
-margin-top: 1rem;
 margin-left: 80%;
 text-align: center;
 background: #E8A5A5;
+bottom: 1px;
 @media screen and (max-width: 700px) {
         margin: 0 auto;
     }`
@@ -128,7 +132,7 @@ const SearchResult = ({history}) => {
     const toreview = (book) =>{
         setBookData(()=> [{'isbn': book.isbn, 'bookTitle': book.title, 'bookAuthors': book.authors}])
         let id = book.isbn
-        history.push(`/write/${id}`)
+        history.push(`/write`)
     }
     
     return(

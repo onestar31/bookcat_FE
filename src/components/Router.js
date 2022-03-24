@@ -22,7 +22,6 @@ const Router = () => {
                 <PublicRoute restricted path='/login' component={Login}  exact></PublicRoute>
                 <PublicRoute restricted path='/signup' component={Signup} exact></PublicRoute>
                 <PrivateRoute path='/storage' component={Storage} exact></PrivateRoute>
-                <PrivateRoute path='/write/:id' component={Write} exact></PrivateRoute>
                 <PrivateRoute path='/write' component={Write} exact></PrivateRoute>
                 <PrivateRoute path='/info' component={Info} exact></PrivateRoute>
                 <PrivateRoute path='/review' component={Review} exact></PrivateRoute>
