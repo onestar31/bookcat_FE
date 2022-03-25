@@ -74,8 +74,12 @@ const Home = ({ history }) => {
             alert('키워드를 입력해주세요')
         } else {
             window.sessionStorage.setItem('keyword', keyvalue)
-            history.push('/searchresult')
+            toSearchResult()
         }
+    }
+
+    const toSearchResult = () => {
+        history.push('/searchresult')
     }
 
     return (
