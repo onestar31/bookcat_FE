@@ -3,14 +3,12 @@ import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
-import { ResultApi } from '../ResultApi'
+import { ResultApi } from '../utils/KakaoApi'
 import axios from 'axios'
 import Nickname from '../components/Nickname'
 import { useForm } from 'react-hook-form'
-import { reviewdataAtom, bookdataAtom, writedataAtom } from '../components/Atom'
+import { reviewdataAtom, bookdataAtom, writedataAtom } from '../utils/Atom'
 import { useRecoilValue, useRecoilState } from 'recoil'
-
-//서평쓰기 폼 구현
 
 const Body = styled.div`
 font-family: 'YanoljaYacheR';
@@ -87,8 +85,8 @@ const Edit = ({history}) => {
     const [rate, setRate] = useState(0)
     const [change, setChange] = useState(false)
     const [gorender, setGoRender] = useState(false)
-    const [onChangeValue, setonChangeValue] = useState('')
-    const { register, handleSubmit } = useForm() //useForm react-hook 사용
+    const [setonChangeValue] = useState('')
+    const { register, handleSubmit } = useForm()
     const reviewvalue = useRecoilValue(reviewdataAtom) 
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
     const [writedata, setWriteData] = useRecoilState(writedataAtom)

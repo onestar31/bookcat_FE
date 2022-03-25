@@ -5,13 +5,11 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Nickname from '../components/Nickname'
 import { withRouter } from 'react-router-dom'
-import { ResultApi } from '../ResultApi'
-import { reviewdataAtom } from '../components/Atom'
+import { ResultApi } from '../utils/KakaoApi'
+import { reviewdataAtom } from '../utils/Atom'
 import { useSetRecoilState } from "recoil"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-
-//서평 공간 구현
 
 const Body = styled.div`
 font-family: 'YanoljaYacheR';
@@ -120,7 +118,6 @@ display: flex;
 const Star1 = styled.div`
 position: relative;
 color: ${(props) => props.rate>4 ? '#A17E00' : 'transparent'};`
-
 const Star2 = styled(Star1)`
 color: ${(props) => props.rate>3 ? '#A17E00' : 'transparent'};`
 const Star3 = styled(Star1)`
@@ -151,7 +148,7 @@ const Storage = ({history}) => {
 
     useEffect (async() => {
         if (datas !== []){
-        for (let i=0; i<datas.length-1; i++){
+        for (let i=0; i<datas.length; i++){
             await booksdata(datas[i].bookId)
         }
     }

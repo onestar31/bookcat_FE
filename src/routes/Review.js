@@ -1,15 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
 import Nickname from '../components/Nickname'
-import { ResultApi } from '../ResultApi'
+import { ResultApi } from '../utils/KakaoApi'
 import { withRouter } from 'react-router-dom'
-import { bookdataAtom } from '../components/Atom'
-import { writedataAtom } from '../components/Atom'
+import { bookdataAtom, writedataAtom } from '../utils/Atom'
 import { useRecoilValue } from 'recoil'
 
-//서평 공간 구현
 const Loader = styled.div`
 display: block;
 text-align: center;
@@ -118,58 +116,57 @@ font-size: 17px;
 cursor: pointer;`
 
 
-const Review = ({history}) => {
-    const [data, setData] = useState('')
+const Review = ({ history }) => {
+    const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const bookvalue = useRecoilValue(bookdataAtom)
     const writevalue = useRecoilValue(writedataAtom)
 
-    //카카오 api 가져오기 
     async function booksdata(title, author) {
         const params = {
             target: 'title' & 'person',
             query: title, author,
             size: 1,
-    };
-    const {data: {documents}} = await ResultApi(params); console.log(documents);
-    setData(documents[0])
-} 
+        };
+        const { data: { documents } } = await ResultApi(params); console.log(documents);
+        setData(documents[0])
+    }
 
     useEffect(() => {
-       booksdata(bookvalue[0].bookTitle, bookvalue[0].bookAuthors)
-        setLoading(false)
-    },[])
+        booksdata(bookvalue[0].bookTitle, bookvalue[0].bookAuthors)
+        setLoading(false) //수정
+    }, [])
 
-    //서평 공간으로 이동
-    const moveStorage = () => {
+    const toStorage = () => {
         history.push('/storage')
     }
 
-    return(
+    return (
         <>
-        <Nickname />
-        <Top />
-        <Navigation />
-        {loading ? <Loader>Loading...</Loader> : 
-    <Body>
-        <Reviewform>
-            <ReviewTitle>{writevalue[0].writeTitle}</ReviewTitle>
-            <Bookinfo>
-                <Bookimg src={data.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
-                <Bookcontainer>
-                <Booktitle>{data.title}</Booktitle>
-                <Bookauthors>{data.authors}</Bookauthors>
-                <Bookcontents>{data.contents}...</Bookcontents>
-                </Bookcontainer>
-            </Bookinfo>
-            <Reviewtext>{writevalue[0].writeTxt}</Reviewtext>
-        </Reviewform>        
-        <Btn>
-       <List onClick={moveStorage}>목록</List>
-        </Btn>
-    </Body>
-    }
-    </>
-    )}
+            <Nickname />
+            <Top />
+            <Navigation />
+            {loading ? <Loader>Loading...</Loader> :
+                <Body>
+                    <Reviewform>
+                        <ReviewTitle>{writevalue[0].writeTitle}</ReviewTitle>
+                        <Bookinfo>
+                            <Bookimg src={data.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
+                            <Bookcontainer>
+                                <Booktitle>{data.title}</Booktitle>
+                                <Bookauthors>{data.authors}</Bookauthors>
+                                <Bookcontents>{data.contents}...</Bookcontents>
+                            </Bookcontainer>
+                        </Bookinfo>
+                        <Reviewtext>{writevalue[0].writeTxt}</Reviewtext>
+                    </Reviewform>
+                    <Btn>
+                        <List onClick={toStorage}>목록</List>
+                    </Btn>
+                </Body>
+            }
+        </>
+    )
+}
 
 export default withRouter(Review)

@@ -4,12 +4,11 @@ import Top from '../components/Top'
 import styled from 'styled-components'
 import axios from 'axios'
 import Nickname from '../components/Nickname'
-import { ResultApi } from '../ResultApi'
+import { ResultApi } from '../utils/KakaoApi'
 import { withRouter } from 'react-router-dom'
-import { reviewdataAtom } from '../components/Atom'
+import { reviewdataAtom } from '../utils/Atom'
 import { useRecoilValue } from 'recoil'
 
-//서평 공간 구현
 const Loader = styled.div`
 display: block;
 text-align: center;

@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-//검색 결과 화면 api
 const REST_API_KEY = process.env.REACT_APP_REST_API_KEY
 
 const client = axios.create({

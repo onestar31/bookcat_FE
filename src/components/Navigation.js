@@ -2,8 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { NavLink, withRouter } from 'react-router-dom'
 
-//네이게이션 구현
-
 const Unlist = styled.ul`
 text-align: center;
 justify-content: center;

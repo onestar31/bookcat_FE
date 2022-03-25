@@ -1,17 +1,14 @@
-
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
-import { ResultApi } from '../ResultApi'
-import {withRouter} from 'react-router-dom'
+import { ResultApi } from '../utils/KakaoApi'
+import { withRouter } from 'react-router-dom'
 import Nickname from '../components/Nickname'
-import {bookdataAtom} from '../components/Atom'
-import {useSetRecoilState} from 'recoil' 
+import { bookdataAtom } from '../utils/Atom'
+import { useSetRecoilState } from 'recoil'
 
-//메인 검색 화면 및 검색 결과 화면 구현
-
-const Resultform = styled.div`
+const Body = styled.div`
 font-family: 'YanoljaYacheR';
 display: flex;
 flex-direction: column;
@@ -110,7 +107,7 @@ bottom: 1px;
         margin: 0 auto;
     }`
 
-const SearchResult = ({history}) => {
+const SearchResult = ({ history }) => {
     const [data, setData] = useState([])
     const keyword = window.sessionStorage.getItem('keyword')
     const setBookData = useSetRecoilState(bookdataAtom)
@@ -120,40 +117,44 @@ const SearchResult = ({history}) => {
             target: 'title',
             query: keyword,
             size: 5,
-    };
-    const {data: {documents}} = await ResultApi(params); console.log(documents);
-    setData(documents)
-    
-} 
-    useEffect (() => {
+        };
+        const { data: { documents } } = await ResultApi(params); console.log(documents);
+        setData(documents)
+    }
+
+    useEffect(() => {
         booksdata(keyword)
     }, [])
-    
-    const toreview = (book) =>{
-        setBookData(()=> [{'isbn': book.isbn, 'bookTitle': book.title, 'bookAuthors': book.authors}])
-        let id = book.isbn
-        history.push(`/write/api`)
+
+    const storeBookData = (element) => (setBookData(() => [{ 'isbn': element.isbn, 'bookTitle': element.title, 'bookAuthors': element.authors }]))
+
+    const toWrite = () => history.push('/write/api')
+
+    const clickWriteButton = async (book) => {
+        storeBookData(book)
+        toWrite()
     }
-    
-    return(
+
+    return (
         <>
-    <   Nickname />
-        <Top />
-        <Navigation />
-    <Resultform>
-        <Resultname>'{keyword}' 검색한 결과</Resultname> 
-    {data.map((book)=> <Resultbox key={book.isbn}>
-        <Bookimg src={book.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
-        <Bookcontainer>
-        <Booktitle>{book.title}</Booktitle>
-        <Bookauthors>{book.authors}</Bookauthors>
-        <Bookcontents>{book.contents}...</Bookcontents>
-        <Bookurl href={book.url}  target='_blank'>링크</Bookurl>
-        <Bookreview onClick={() => toreview(book)}>서평 쓰기</Bookreview>
-        </Bookcontainer>
-        </Resultbox>)}
-    </Resultform>
-    </>
-    )}
+            <   Nickname />
+            <Top />
+            <Navigation />
+            <Body>
+                <Resultname>'{keyword}' 검색한 결과</Resultname>
+                {data.map((book) => <Resultbox key={book.isbn}>
+                    <Bookimg src={book.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
+                    <Bookcontainer>
+                        <Booktitle>{book.title}</Booktitle>
+                        <Bookauthors>{book.authors}</Bookauthors>
+                        <Bookcontents>{book.contents}...</Bookcontents>
+                        <Bookurl href={book.url} target='_blank'>링크</Bookurl>
+                        <Bookreview onClick={() => clickWriteButton(book)}>서평 쓰기</Bookreview>
+                    </Bookcontainer>
+                </Resultbox>)}
+            </Body>
+        </>
+    )
+}
 
 export default withRouter(SearchResult)

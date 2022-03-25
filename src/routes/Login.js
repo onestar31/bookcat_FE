@@ -1,12 +1,10 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import axios from 'axios'
 import Nickname from '../components/Nickname'
-
-//로그인 구현
 
 const Title = styled.h1`
 font-family: 'OTWelcomeRA';
@@ -90,53 +88,63 @@ text-decoration: none;
 color: white;
 `
 
-const Login = ({history}) => {
+const Login = ({ history }) => {
     const [emailState, setEmail] = useState('')
     const [passwordState, setPassword] = useState('')
 
     const onChange = (e) => {
-        const {target: {value, name}} = e
-        if (name === 'email'){
+        const { target: { value, name } } = e
+        if (name === 'email') {
             setEmail(value)
         } else {
             setPassword(value)
         }
     }
-    //submit시 서버로 axios 요청하여 login
-    const onSubmit = (e) => {
+
+    const loginPost = (e) => {
         e.preventDefault()
         axios.post("http://localhost:8000/user/login", {
-            userEmail : emailState,
-            userPw : passwordState,
-        }).then(function(response){
+            userEmail: emailState,
+            userPw: passwordState,
+        }).then(function (response) {
             console.log(response.data)
             alert(response.data.message)
-            sessionStorage.setItem('nickname', response.data.userName) //닉네임 받아오면 emailState 대신 nickname 넣기
-            sessionStorage.setItem('email', response.data.userEmail)
-            sessionStorage.setItem('uid', response.data.uid) //비밀번호 바꾸기 위한 axios put 요청을 해당 id 주소로 보낼 때 필요
-
-           history.push('/')
-        }).catch(function(error){
+            storeLoginData(response)
+        }).catch(function (error) {
             console.log(error.response)
             alert(error.response.data.message)
-        })
+        }).finally(
+            toHome()
+        )
     }
-    return(
+
+    const storeLoginData = (response) => {
+        sessionStorage.setItem('nickname', response.data.userName)
+        sessionStorage.setItem('email', response.data.userEmail)
+        sessionStorage.setItem('uid', response.data.uid)
+    }
+
+    const toHome = () => {
+        history.push('/')
+    }
+
+    return (
         <>
-    <Nickname />
-    <Top />
-    <Navigation />
-    <Title>로그인</Title>
-    {/*<Footprint1 src="footprint.png"></Footprint1>*/}
-    <Loginform onSubmit={onSubmit}>
-        <Email type="email" required placeholder='이메일' name='email' value={emailState} onChange={onChange}></Email><br/>
-        <Password type="password" required placeholder='비밀번호' name='password' value={passwordState} onChange={onChange}></Password><br/>
-        <Loginbtn>로그인</Loginbtn><br/>
-        <Asksignup>아직 회원이 아니신가요?</Asksignup>
-        <Signupbtn><Slink to="/signup">회원가입 하기</Slink></Signupbtn>
-    </Loginform>
-    {/*<Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>*/}
-    </>
-    )}
+            <Nickname />
+            <Top />
+            <Navigation />
+            <Title>로그인</Title>
+            {/*<Footprint1 src="footprint.png"></Footprint1>*/}
+            <Loginform onSubmit={loginPost}>
+                <Email type="email" required placeholder='이메일' name='email' value={emailState} onChange={onChange}></Email><br />
+                <Password type="password" required placeholder='비밀번호' name='password' value={passwordState} onChange={onChange}></Password><br />
+                <Loginbtn>로그인</Loginbtn><br />
+                <Asksignup>아직 회원이 아니신가요?</Asksignup>
+                <Signupbtn><Slink to="/signup">회원가입 하기</Slink></Signupbtn>
+            </Loginform>
+            {/*<Footprint2 src={process.env.PUBLIC_URL+`footprint.png`}></Footprint2>*/}
+        </>
+    )
+}
 
 export default withRouter(Login)

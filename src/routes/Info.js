@@ -7,8 +7,6 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { withRouter } from 'react-router-dom'
 
-
-//내 정보 구현
 const Title = styled.h1`
 width: 8rem;
 font-size: 28px;
@@ -110,27 +108,28 @@ font-size: 15px;
 `
 
 const Info = ({history}) => {
-    const { register, handleSubmit, setValue } = useForm()
-
+    const { register, handleSubmit } = useForm()
     const email = sessionStorage.getItem('email')
     const nickname = sessionStorage.getItem('nickname')
-    const id = sessionStorage.getItem('id')
 
-    const changePw = (data) => {
+    const changePw = async (data) => {
         if (data.newpw === data.checkpw) {
-            axios.patch(`http://localhost:8000/user/changepw`, {
+            await axios.patch(`http://localhost:8000/user/changepw`, {
                 newPw: data.newpw,
                 userEmail: email,
                 userPw: data.curpw,
             })
                 .then(function (response) {
                     alert(response.data.message);
-                    setValue(data.curpw, '')
                 })
                 .catch(function (error) {
                     alert(error.response.data.message);
                 });
         }
+        toHome()
+    }
+
+    const toHome = () => {
         history.push('/')
     }
 
