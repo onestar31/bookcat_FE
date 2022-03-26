@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Navigation from '../components/Navigation'
 import Top from '../components/Top'
 import styled from 'styled-components'
@@ -125,82 +125,85 @@ outline: none;
 font-family: 'YanoljaYacheR' !important;
 font-size: 17px;`
 
-const Detail = ({history}) => {
+const Detail = ({ history }) => {
     const [bookdata, setBookdata] = useState([])
     const [loading, setLoading] = useState(true)
-    const reviewdata = useRecoilValue(reviewdataAtom) 
+    const reviewdata = useRecoilValue(reviewdataAtom)
     const reviewbid = reviewdata[0].bookId
 
-
-    //bid로 책 정보 가져오기
-    async function booksdata(isbn10, isbn13) {
-        const params = {
-            target: 'isbn',
-            query: isbn10 || isbn13,
-            size: 1,
-    };
-    const {data: {documents}} = await ResultApi(params); console.log(documents); 
-    setBookdata(documents[0])
-    } 
-
     useEffect(() => {
-        if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
-            const isbn10 = reviewbid.slice(0,10)
+        if (reviewbid.indexOf(' ') !== -1) {
+            const isbn10 = reviewbid.slice(0, 10)
             const isbn13 = reviewbid.slice(11)
             booksdata(isbn10, isbn13)
         } else {
             booksdata(reviewbid)
         }
-        setLoading(false) //loading 이 너무 빨리 이루어진다 싶으면 async await 걸기
-    },[])
-    
-    const moveEdit = () => {
+        setLoading(false)
+    }, [])
+
+    async function booksdata(isbn10, isbn13) {
+        const params = {
+            target: 'isbn',
+            query: isbn10 || isbn13,
+            size: 1,
+        };
+        const { data: { documents } } = await ResultApi(params); console.log(documents);
+        setBookdata(documents[0])
+    }
+
+    const toEdit = () => {
         history.push('/edit')
     }
 
-    //삭제 버튼 누르면 삭제 
-    const goDelete = () => {
-        console.log(reviewdata[0].reviewId)
-        axios.delete('http://127.0.0.1:8000/review/delete/', {data : {
-        reviewId : reviewdata[0].reviewId
-    }})
-    .then(function (response) {
-        alert(response.data.message)
-        console.log(response);
-        history.push('/storage')
-    })
-    .catch(function (error) {
-        alert(error.response.data.message)
-        console.log(error);
-    })
+    const dataDelete = () => {
+        axios.delete('http://127.0.0.1:8000/review/delete/', {
+            data: {
+                reviewId: reviewdata[0].reviewId
+            }
+        })
+            .then(function (response) {
+                alert(response.data.message)
+                console.log(response);
+                toStorage()
+            })
+            .catch(function (error) {
+                alert(error.response.data.message)
+                console.log(error);
+            })
     }
 
-    return(
-        <>
-        <Nickname />
-        <Top />
-        <Navigation />
-        {loading ? <Loader>Loading...</Loader> : 
-    <Body>
-        <Reviewform>
-            <ReviewTitle>{reviewdata[0].reviewTitle}</ReviewTitle>
-            <Bookinfo>
-                <Bookimg src={bookdata?.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
-                <Bookcontainer>
-                <Booktitle>{bookdata?.title}</Booktitle>
-                <Bookauthors>{bookdata?.authors}</Bookauthors>
-                <Bookcontents>{bookdata.contents}...</Bookcontents>
-                </Bookcontainer>
-            </Bookinfo>
-            <Reviewtext>{reviewdata[0].reviewTxt}</Reviewtext>
-        </Reviewform>
-        <Btn>
-       <Edit onClick={moveEdit}>수정</Edit>
-        <Delete onClick={goDelete}>삭제</Delete>
-        </Btn>
-    </Body>
+    const toStorage = () => {
+        history.push('/storage')
     }
-    </>
-)}
+
+    return (
+        <>
+            <Nickname />
+            <Top />
+            <Navigation />
+            {loading ? <Loader>Loading...</Loader> :
+                <Body>
+                    <Reviewform>
+                        <ReviewTitle>{reviewdata[0].reviewTitle}</ReviewTitle>
+                        <Bookinfo>
+                            <Bookimg src={bookdata?.thumbnail || `https://raw.githubusercontent.com/onestar31/bookcat_FE/master/src/nobookimg.jpg`}></Bookimg>
+                            <Bookcontainer>
+                                <Booktitle>{bookdata?.title}</Booktitle>
+                                <Bookauthors>{bookdata?.authors}</Bookauthors>
+                                <Bookcontents>{bookdata.contents}...</Bookcontents>
+                            </Bookcontainer>
+                        </Bookinfo>
+                        <Reviewtext>{reviewdata[0].reviewTxt}</Reviewtext>
+                    </Reviewform>
+                    <Btn>
+                        <Edit onClick={toEdit}>수정</Edit>
+                        <Delete onClick={dataDelete}>삭제</Delete>
+                    </Btn>
+                </Body>
+            }
+        </>
+    )
+}
 
 export default withRouter(Detail)

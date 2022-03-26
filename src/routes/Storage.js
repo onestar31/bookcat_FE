@@ -134,8 +134,22 @@ const Storage = ({history}) => {
     const [noData, setNoData] = useState(true) 
     const setreviewdata = useSetRecoilState(reviewdataAtom)
 
-    //장고로 부터 데이터 가져오는 api
     useEffect(()=>{
+        reviewGet()
+    },[])
+
+    useEffect (() => {
+        async function callBookData () {
+            if (datas !== []){
+                for (let i=0; i<datas.length; i++){
+                    await booksdata(datas[i].bookId)
+                }
+            }
+        }
+        callBookData()
+    }, [datas])
+    
+    const reviewGet = () => {
         axios.get('http://127.0.0.1:8000/review/')
         .then((response) => {
             setDatas(response.data.filter((data) => data.userId === +sessionStorage.getItem('uid')))
@@ -144,19 +158,10 @@ const Storage = ({history}) => {
         }).catch((error)=>{
             console.log(error)
         })
-    },[])
-
-    useEffect (async() => {
-        if (datas !== []){
-        for (let i=0; i<datas.length; i++){
-            await booksdata(datas[i].bookId)
-        }
     }
-    }, [datas])
 
-     //isbn으로 책 img 가져오기
     async function booksdata(isbn) {
-        isbn.indexOf(' ') !== -1 ? isbn = isbn.slice(11) : isbn = isbn
+        isbn.indexOf(' ') !== -1 && (isbn = isbn.slice(11)) 
         const params = {
             target: 'isbn',
             query: isbn,
@@ -167,11 +172,9 @@ const Storage = ({history}) => {
     setTitle((olddata) => [...olddata, documents[0].title])
     }
 
-    //book id를 이용해 상세페이지로 이동 
-    const moveDetail = (data) => {
-        console.log(data)       //변수 이름 맞는지 확인하기
+    const toDetail = (data) => {    
         setreviewdata(() => [{'bookId': data.bookId, 'reviewId': data.id, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
-        history.push(`/detail`)        //reviewId 추가
+        history.push(`/detail`)  
     }
    
     return(
@@ -183,7 +186,7 @@ const Storage = ({history}) => {
         <Title>서평 공간</Title>
         {noData ? <Noform>작성한 서평이 없습니다</Noform> : 
         <ul>
-        {datas && datas.map((data, idx)=> <Storeform key={data.id} onClick={() => moveDetail(data)}>
+        {datas && datas.map((data, idx)=> <Storeform key={data.id} onClick={() => toDetail(data)}>
                 <Bookimg bground={thumbnail[idx]}></Bookimg>
                 <Rate>
                 <Star1 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star1>
@@ -193,10 +196,9 @@ const Storage = ({history}) => {
                 <Star5 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star5>
                 </Rate>
                 <Bookcontainer>
-                <Writetitle>{data.reviewTitle}</Writetitle>   {/*// 모델 수정 必 */}
+                <Writetitle>{data.reviewTitle}</Writetitle> 
                 <Booktitle>{title[idx]}</Booktitle>    
                 <Writecontent>{data.reviewTxt.length>129 ? data.reviewTxt.slice(0,130)+'...' : data.reviewTxt}</Writecontent>
-               {/* rid 받아서 리뷰 구분할 필요 없을까?*/}
                <Date>{data.reviewDate}</Date>
                 </Bookcontainer>
             </Storeform>

@@ -102,7 +102,7 @@ const Write = ({ history }) => {
             uid: sessionStorage.getItem('uid'),
             bid: bookdata[0].isbn,
             rtitle: writedata[0].writeTitle,
-            date: calculateDate,
+            date: calculateDay,
             rtext: writedata[0].writeTxt,
             rate: +rate
         }).then(function (response) {
@@ -126,7 +126,7 @@ const Write = ({ history }) => {
         setChange(true)
     }
 
-    const calculateDate = () => {
+    const calculateDay = () => {
         const today = new Date()
         const year = today.getFullYear()
         const month = today.getMonth()
