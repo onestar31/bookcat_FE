@@ -8,8 +8,7 @@ import Nickname from '../components/Nickname'
 import { useForm } from 'react-hook-form'
 import { bookdataAtom, writedataAtom } from '../utils/Atom'
 import { useRecoilState } from 'recoil'
-
-//서평쓰기 폼 구현
+import { ResultApi } from 'utils/KakaoApi'
 
 const Body = styled.div`
 font-family: 'YanoljaYacheR';
@@ -83,24 +82,25 @@ const Rate = styled(Inputbox)`
 text-align: start;`
 
 const Write = ({ history }) => {
+    const [isbn, setIsbn] = useState('')
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
     const [writedata, setWriteData] = useRecoilState(writedataAtom)
-    const [change, setChange] = useState(false)
+    const [changeFirst, setChangeFirst] = useState(false)
     const [rate, setRate] = useState(0)
     const { register, handleSubmit } = useForm()
     const booktitledefault = (history.location.pathname === '/write') ? '' : bookdata[0].bookTitle
     const bookauthordefault = (history.location.pathname === '/write') ? '' : bookdata[0].bookAuthors
 
     useEffect(() => {
-        if (change) {
+        if (changeFirst){
             sendPost()
         }
-    }, [change])
+    }, [changeFirst])
 
     const sendPost = () => {
         axios.post("http://127.0.0.1:8000/review/", {
             uid: sessionStorage.getItem('uid'),
-            bid: bookdata[0].isbn,
+            bid: bookdata[0].isbn || isbn,
             rtitle: writedata[0].writeTitle,
             date: calculateDay,
             rtext: writedata[0].writeTxt,
@@ -118,12 +118,23 @@ const Write = ({ history }) => {
 
     const toReview = () => history.push('/review')
 
+    async function booksdata(title, author) {
+        const params = {
+            target: 'title' & 'person',
+            query: title, author,
+            size: 1,
+        };
+        const { data: { documents } } = await ResultApi(params);
+        setIsbn(documents[0].isbn)
+    }
+
     const writeSubmit = async (data) => {
-        setWriteData(() => [{ 'writeTitle': data.rtitle, 'writeTxt': data.rtext }])
-        if (history.location.pathname === '/write') {
-            setBookData(() => [{ 'bookTitle': data.btitle, 'bookAuthors': data.bauthor }])
-        }
-        setChange(true)
+        await booksdata(data.btitle, data.bauthor)
+            setWriteData(() => [{ 'writeTitle': data.rtitle, 'writeTxt': data.rtext }])
+            if (history.location.pathname === '/write') {
+                setBookData(() => [{ 'bookTitle': data.btitle, 'bookAuthors': data.bauthor }])
+            }
+        setChangeFirst(true)
     }
 
     const calculateDay = () => {

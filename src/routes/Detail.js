@@ -148,7 +148,7 @@ const Detail = ({ history }) => {
             query: isbn10 || isbn13,
             size: 1,
         };
-        const { data: { documents } } = await ResultApi(params); console.log(documents);
+        const { data: { documents } } = await ResultApi(params); 
         setBookdata(documents[0])
     }
 

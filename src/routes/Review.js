@@ -126,9 +126,9 @@ const Review = ({ history }) => {
         const params = {
             target: 'title' & 'person',
             query: title, author,
-            size: 1,
+            size: 5,
         };
-        const { data: { documents } } = await ResultApi(params); console.log(documents);
+        const { data: { documents } } = await ResultApi(params);  
         setData(documents[0])
     }
 

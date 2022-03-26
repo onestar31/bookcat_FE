@@ -110,12 +110,12 @@ const Login = ({ history }) => {
             console.log(response.data)
             alert(response.data.message)
             storeLoginData(response)
+            toHome()
         }).catch(function (error) {
             console.log(error.response)
             alert(error.response.data.message)
-        }).finally(
-            toHome()
-        )
+            window.location.reload()
+        })
     }
 
     const storeLoginData = (response) => {

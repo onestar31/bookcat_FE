@@ -118,7 +118,7 @@ const SearchResult = ({ history }) => {
             query: keyword,
             size: 5,
         };
-        const { data: { documents } } = await ResultApi(params); console.log(documents);
+        const { data: { documents } } = await ResultApi(params); 
         setData(documents)
     }
 
@@ -131,13 +131,13 @@ const SearchResult = ({ history }) => {
     const toWrite = () => history.push('/write/api')
 
     const clickWriteButton = async (book) => {
-        storeBookData(book)
+        await storeBookData(book)
         toWrite()
     }
 
     return (
         <>
-            <   Nickname />
+            <Nickname />
             <Top />
             <Navigation />
             <Body>

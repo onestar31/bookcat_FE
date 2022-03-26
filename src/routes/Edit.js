@@ -85,70 +85,66 @@ const Edit = ({history}) => {
     const [rate, setRate] = useState(0)
     const [change, setChange] = useState(false)
     const [gorender, setGoRender] = useState(false)
-    const [setonChangeValue] = useState('')
+    const [onChangeValue, setonChangeValue] = useState('')
     const { register, handleSubmit } = useForm()
     const reviewvalue = useRecoilValue(reviewdataAtom) 
     const [bookdata, setBookData] = useRecoilState(bookdataAtom)
     const [writedata, setWriteData] = useRecoilState(writedataAtom)
-
     const reviewbid = reviewvalue[0].bookId
 
-    useEffect(async()=>{
-        if (reviewbid.indexOf(' ') !== -1){ //isbn10과 isbn13이 동시에 주어진 경우
+    useEffect(()=>{
+        if (reviewbid.indexOf(' ') !== -1){ 
         const isbn10 = reviewbid.slice(0,10)
         const isbn13 = reviewbid.slice(11)
-        await booksdata(isbn10, isbn13)
+        booksdata(isbn10, isbn13)
     } else {
-        await booksdata(reviewbid)
+        booksdata(reviewbid)
     }
     setGoRender(true)
     },[])
 
     useEffect(()=>{
         if (change){
-        axios.put("http://127.0.0.1:8000/review/edit/", { //put 보내는 url 확인
-        uid : sessionStorage.getItem('uid'),
-        bid : datas.isbn, // bid string 으로 받는 거 확인
-        rid : reviewvalue[0].reviewId,  //reviewId 추가
-        rtitle : writedata[0].writeTitle,
-        rtext: writedata[0].writeTxt,
-        rate : rate === 0 ? reviewvalue[0].reviewRate : rate,
-    }).then(function(response) {
-        console.log(response)
-        alert(response.data.message)
-    }).catch(function(error) {
-        console.log(error)
-        alert('문제가 발생했습니다.')
-    }).finally(() => {
-        history.push('/review')
-    })}
-    }, [change])
+        editPut()
+    }}, [change])
 
-    //onSubmit를 한 경우 시행되는 코드 
+    const editPut = () => {
+        axios.put("http://127.0.0.1:8000/review/edit/", {
+            uid : sessionStorage.getItem('uid'),
+            bid : datas.isbn, 
+            rid : reviewvalue[0].reviewId, 
+            rtitle : writedata[0].writeTitle,
+            rtext: writedata[0].writeTxt,
+            rate : rate === 0 ? reviewvalue[0].reviewRate : rate,
+        }).then(function(response) {
+            console.log(response)
+            alert(response.data.message)
+            toReview()
+        }).catch(function(error) {
+            console.log(error)
+            alert('문제가 발생했습니다.')
+        })
+    }
+
+    const toReview = () => {
+        history.push('/review')
+    }
+
     const writeSubmit = (data) => {
         setWriteData(()=> [{'writeTitle': data.rtitle, 'writeTxt': data.rtext}])
         setChange(true)
     }
 
-    //서평 책 정보 카카오 api로 불러오기 함수
     async function booksdata(isbn10, isbn13) {
         const params = {
             target: 'isbn',
             query: isbn10 || isbn13,
             size: 1,
     };
-    const {data: {documents}} = await ResultApi(params); console.log(documents); 
+    const {data: {documents}} = await ResultApi(params); 
     setBookData(()=> [{'bookTitle': documents[0].title, 'bookAuthors': documents[0].authors}])
     setDatas(documents[0])
     } 
-
-    const onChange = (e) => {
-        setRate(e.target.value)
-    }
-     
-    const changeValue = (e) => {
-        setonChangeValue(e.target.value)
-    }
 
     const limitTextLength = (e) => {
         if (e.target.value.length > 1000) {
@@ -165,9 +161,9 @@ const Edit = ({history}) => {
         <Title>글쓰기</Title>
         <Writeform onSubmit={handleSubmit(writeSubmit)}>
             <Inputbox  placeholder='제목' {...register("rtitle", {required: "input your title", maxLength: 30})} maxLength='30' defaultValue={reviewvalue[0].reviewTitle}></Inputbox>
-            <Inputbox  placeholder='책 제목' required onChange={changeValue} value={ gorender ? bookdata[0].bookTitle : null}></Inputbox>
-            <Inputbox  placeholder='지은이' required onChange={changeValue} value={ gorender ? bookdata[0].bookAuthors : null}></Inputbox>
-            <Rate as="div" onChange={onChange}>
+            <Inputbox  placeholder='책 제목' required onChange={(e) => setonChangeValue(e.target.value)} value={ gorender ? bookdata[0].bookTitle : ''}></Inputbox>
+            <Inputbox  placeholder='지은이' required onChange={(e) => setonChangeValue(e.target.value)} value={ gorender ? bookdata[0].bookAuthors : ''}></Inputbox>
+            <Rate as="div" onChange={(e) => setRate(e.target.value)}>
                 <Ratebox type="radio" name="rate" value={1} defaultChecked={reviewvalue[0].reviewRate===1 ? true : false}/>★  
                 <Ratebox type="radio" name="rate" value={2} defaultChecked={reviewvalue[0].reviewRate===2 ? true : false}/>★★   
                 <Ratebox type="radio" name="rate" value={3} defaultChecked={reviewvalue[0].reviewRate===3 ? true : false}/>★★★ 

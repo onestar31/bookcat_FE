@@ -117,96 +117,96 @@ display: flex;
 
 const Star1 = styled.div`
 position: relative;
-color: ${(props) => props.rate>4 ? '#A17E00' : 'transparent'};`
+color: ${(props) => props.rate > 4 ? '#A17E00' : 'transparent'};`
 const Star2 = styled(Star1)`
-color: ${(props) => props.rate>3 ? '#A17E00' : 'transparent'};`
+color: ${(props) => props.rate > 3 ? '#A17E00' : 'transparent'};`
 const Star3 = styled(Star1)`
-color: ${(props) => props.rate>2 ? '#A17E00' : 'transparent'};`
+color: ${(props) => props.rate > 2 ? '#A17E00' : 'transparent'};`
 const Star4 = styled(Star1)`
-color: ${(props) => props.rate>1 ? '#A17E00' : 'transparent'};`
+color: ${(props) => props.rate > 1 ? '#A17E00' : 'transparent'};`
 const Star5 = styled(Star1)`
-color: ${(props) => props.rate>0 ? '#A17E00' : 'transparent'};`
+color: ${(props) => props.rate > 0 ? '#A17E00' : 'transparent'};`
 
-const Storage = ({history}) => {
-    const [datas, setDatas] = useState([]) 
+const Storage = ({ history }) => {
+    const [datas, setDatas] = useState([])
     const [thumbnail, setThumbnail] = useState([])
     const [title, setTitle] = useState([])
-    const [noData, setNoData] = useState(true) 
+    const [noData, setNoData] = useState(true)
     const setreviewdata = useSetRecoilState(reviewdataAtom)
 
-    useEffect(()=>{
+    useEffect(() => {
         reviewGet()
-    },[])
+    }, [])
 
-    useEffect (() => {
-        async function callBookData () {
-            if (datas !== []){
-                for (let i=0; i<datas.length; i++){
+    useEffect(() => {
+        async function callBookData() {
+            if (datas !== []) {
+                for (let i = 0; i < datas.length; i++) {
                     await booksdata(datas[i].bookId)
                 }
             }
         }
         callBookData()
     }, [datas])
-    
+
     const reviewGet = () => {
         axios.get('http://127.0.0.1:8000/review/')
-        .then((response) => {
-            setDatas(response.data.filter((data) => data.userId === +sessionStorage.getItem('uid')))
-            console.log(response.data)
-            setNoData(false)
-        }).catch((error)=>{
-            console.log(error)
-        })
+            .then((response) => {
+                setDatas(response.data.filter((data) => data.userId === +sessionStorage.getItem('uid')))
+                setNoData(false)
+            }).catch((error) => {
+                console.log(error)
+            })
     }
 
     async function booksdata(isbn) {
-        isbn.indexOf(' ') !== -1 && (isbn = isbn.slice(11)) 
+        isbn.indexOf(' ') !== -1 ? (isbn = isbn.slice(11)) : isbn = isbn
         const params = {
             target: 'isbn',
             query: isbn,
             size: 1,
-    };
-    const {data: {documents}} = await ResultApi(params);
-    setThumbnail((olddata) => [...olddata, documents[0].thumbnail])
-    setTitle((olddata) => [...olddata, documents[0].title])
+        };
+        const { data: { documents } } = await ResultApi(params);
+        setThumbnail((olddata) => [...olddata, documents[0].thumbnail])
+        setTitle((olddata) => [...olddata, documents[0].title])
     }
 
-    const toDetail = (data) => {    
-        setreviewdata(() => [{'bookId': data.bookId, 'reviewId': data.id, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId}])
-        history.push(`/detail`)  
+    const toDetail = (data) => {
+        setreviewdata(() => [{ 'bookId': data.bookId, 'reviewId': data.id, 'reviewTitle': data.reviewTitle, 'reviewDate': data.reviewDate, 'reviewTxt': data.reviewTxt, 'reviewRate': data.reviewRate, 'userId': data.userId }])
+        history.push(`/detail`)
     }
-   
-    return(
+
+    return (
         <>
-        <Nickname />
-        <Top />
-        <Navigation />
-    <Body>
-        <Title>서평 공간</Title>
-        {noData ? <Noform>작성한 서평이 없습니다</Noform> : 
-        <ul>
-        {datas && datas.map((data, idx)=> <Storeform key={data.id} onClick={() => toDetail(data)}>
-                <Bookimg bground={thumbnail[idx]}></Bookimg>
-                <Rate>
-                <Star1 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star1>
-                <Star2 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star2>
-                <Star3 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star3>
-                <Star4 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star4>
-                <Star5 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star5>
-                </Rate>
-                <Bookcontainer>
-                <Writetitle>{data.reviewTitle}</Writetitle> 
-                <Booktitle>{title[idx]}</Booktitle>    
-                <Writecontent>{data.reviewTxt.length>129 ? data.reviewTxt.slice(0,130)+'...' : data.reviewTxt}</Writecontent>
-               <Date>{data.reviewDate}</Date>
-                </Bookcontainer>
-            </Storeform>
-        )}
-        </ul>
-    }
-    </Body>
-    </>
-    )}
+            <Nickname />
+            <Top />
+            <Navigation />
+            <Body>
+                <Title>서평 공간</Title>
+                {noData ? <Noform>작성한 서평이 없습니다</Noform> :
+                    <ul>
+                        {datas && datas.map((data, idx) => <Storeform key={data.id} onClick={() => toDetail(data)}>
+                            <Bookimg bground={thumbnail[idx]}></Bookimg>
+                            <Rate>
+                                <Star1 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star1>
+                                <Star2 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star2>
+                                <Star3 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star3>
+                                <Star4 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star4>
+                                <Star5 rate={data.reviewRate}><FontAwesomeIcon icon={faStar} /></Star5>
+                            </Rate>
+                            <Bookcontainer>
+                                <Writetitle>{data.reviewTitle}</Writetitle>
+                                <Booktitle>{title[idx]}</Booktitle>
+                                <Writecontent>{data.reviewTxt.length > 129 ? data.reviewTxt.slice(0, 130) + '...' : data.reviewTxt}</Writecontent>
+                                <Date>{data.reviewDate}</Date>
+                            </Bookcontainer>
+                        </Storeform>
+                        )}
+                    </ul>
+                }
+            </Body>
+        </>
+    )
+}
 
 export default withRouter(Storage)
