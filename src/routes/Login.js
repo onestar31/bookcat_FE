@@ -103,7 +103,7 @@ const Login = ({ history }) => {
 
     const loginPost = (e) => {
         e.preventDefault()
-        axios.post("http://localhost:8000/user/login", {
+        axios.post("http://0.0.0.0:8000/user/login", {
             userEmail: emailState,
             userPw: passwordState,
         }).then(function (response) {

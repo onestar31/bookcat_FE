@@ -117,7 +117,7 @@ const Signup = ({ history }) => {
 
     const signupPost = (e) => {
         e.preventDefault()
-        axios.post("http://localhost:8000/user/create", {
+        axios.post("http://0.0.0.0:8000/user/create", {
             userName: nickname,
             userEmail: email,
             userPw: password,

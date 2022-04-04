@@ -150,7 +150,7 @@ const Storage = ({ history }) => {
     }, [datas])
 
     const reviewGet = () => {
-        axios.get('http://127.0.0.1:8000/review/')
+        axios.get('http://0.0.0.0:8000/review/')
             .then((response) => {
                 setDatas(response.data.filter((data) => data.userId === +sessionStorage.getItem('uid')))
                 setNoData(false)

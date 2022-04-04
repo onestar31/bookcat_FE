@@ -98,7 +98,7 @@ const Write = ({ history }) => {
     }, [changeFirst])
 
     const sendPost = () => {
-        axios.post("http://127.0.0.1:8000/review/", {
+        axios.post("http://0.0.0.0:8000/review/", {
             uid: sessionStorage.getItem('uid'),
             bid: bookdata[0].isbn || isbn,
             rtitle: writedata[0].writeTitle,
