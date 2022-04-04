@@ -157,7 +157,7 @@ const Detail = ({ history }) => {
     }
 
     const dataDelete = () => {
-        axios.delete('http://127.0.0.1:8000/review/delete/', {
+        axios.delete('http://0.0.0.0:8000/review/delete/', {
             data: {
                 reviewId: reviewdata[0].reviewId
             }

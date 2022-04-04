@@ -114,7 +114,7 @@ const Info = ({history}) => {
 
     const changePw = async (data) => {
         if (data.newpw === data.checkpw) {
-            await axios.patch(`http://localhost:8000/user/changepw`, {
+            await axios.patch(`http://0.0.0.0:8000/user/changepw`, {
                 newPw: data.newpw,
                 userEmail: email,
                 userPw: data.curpw,

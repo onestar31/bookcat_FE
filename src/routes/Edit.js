@@ -109,7 +109,7 @@ const Edit = ({history}) => {
     }}, [change])
 
     const editPut = () => {
-        axios.put("http://127.0.0.1:8000/review/edit/", {
+        axios.put("http://0.0.0.0:8000/review/edit/", {
             uid : sessionStorage.getItem('uid'),
             bid : datas.isbn, 
             rid : reviewvalue[0].reviewId, 
